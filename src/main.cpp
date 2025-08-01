@@ -41,13 +41,15 @@ int main(void)
 	for (int i = 0; i < 800 * 600; ++i)
 	{
 		Uint32 pixel_color = SDL_MapRGBA(SDL_GetPixelFormatDetails(SDL_PIXELFORMAT_RGBA8888), NULL,
-				i % 255, i % 255, i % 255, 255);
+				i % 255, (i / 255) % 255, (i / (255 * 255)) % 255, 255);
 		pixel_buffer[i] = pixel_color;
 	}
 	SDL_UnlockTexture(texture);
+	SDL_RenderClear(renderer);
 	SDL_RenderTexture(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
     SDL_Delay(2000);
+	SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
     return 0;
