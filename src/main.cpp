@@ -1,14 +1,14 @@
 #include <SDL3/SDL.h>
 #include <iostream>
+#include "../inc/raytracer.h"
 
-int main(void)
+/*int main(void)
 {
     if (!SDL_Init(SDL_INIT_VIDEO))
 	{
 		std::cerr << "Unable to initialize SDL: " << SDL_GetError();
         return 1;
     }
-	// Window and renderer setup
     SDL_Window		*window = nullptr;
 	SDL_Renderer	*renderer = nullptr;
 	if (!SDL_CreateWindowAndRenderer("Raytracer", 800, 600, 0, &window, &renderer))
@@ -17,6 +17,7 @@ int main(void)
         SDL_Quit();
         return 1;
     }
+
 	// Texture setup
 	SDL_Texture	*texture = SDL_CreateTexture
 		(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 800, 600);
@@ -53,4 +54,21 @@ int main(void)
     SDL_DestroyWindow(window);
     SDL_Quit();
     return 0;
+}*/
+
+int	main(void)
+{
+	Texture *canvas = nullptr;
+	try
+	{
+		canvas = initialize_sdl();
+		//render
+	}
+	catch (std::exception &e)
+	{
+		std::cerr << "Raytracer error: " << e.what() << std::endl;
+	}
+	delete canvas;
+	Window::getInstance()->~Window();
+	return (0);
 }

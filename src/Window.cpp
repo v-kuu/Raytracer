@@ -3,7 +3,6 @@
 Window::~Window(void)
 {
 	SDL_DestroyWindow(_sdl_window);
-	delete (_instance);
 }
 
 Window*	Window::getInstance(void)
@@ -15,6 +14,11 @@ Window*	Window::getInstance(void)
 			_instance = new Window();
 	}
 	return (_instance);
+}
+
+SDL_Window*	Window::getWindow(void) const
+{
+	return (_sdl_window);
 }
 
 Window::Window(void)

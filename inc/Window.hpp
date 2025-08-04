@@ -12,6 +12,8 @@ class	Window
 
 		static Window	*getInstance(void);
 
+		SDL_Window		*getWindow(void) const;
+
 	private:
 		static Window		*_instance;
 		static std::mutex	_mtx;
