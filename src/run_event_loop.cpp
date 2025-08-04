@@ -16,13 +16,18 @@ void	run_event_loop(Texture *canvas)
 		int	x, y;
 		if (!SDL_GetWindowSizeInPixels(Window::getInstance()->getWindow(), &x, &y))
 		{
-			throw (std::runtime_error("Failed to get window size"));
+			throw (std::runtime_error("Failed to get texture size"));
 		}
-		for (int i = 0; i < x * y; ++i)
+		for (int i = 0; i < y; ++i)
 		{
-			Uint32 pixel_color = SDL_MapRGBA(SDL_GetPixelFormatDetails(SDL_PIXELFORMAT_RGBA8888), NULL,
-					i % 255, (i / 255) % 255, (i / (255 * 255)) % 255, 255);
-			pixel_buffer[i] = pixel_color;
+			for (int j = 0; j < x; ++j)
+			{
+				Uint32 pixel_color =
+					//(i % 255 << 24 | (i / 255) % 255 << 16 |
+					 //(i / (255 * 255)) % 255 << 8 | 255);
+					 (255 << 24 | 255 << 16 | 255 << 8 | 255);
+				pixel_buffer[i * (pitch / sizeof(Uint32)) + j] = pixel_color;
+			}
 		}
 		SDL_UnlockTexture(canvas->getTexture());
 		SDL_RenderClear(rnd->getRenderer());
