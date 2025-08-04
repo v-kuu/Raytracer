@@ -15,7 +15,7 @@ Texture	*initialize_sdl(void)
 	Texture	*ret = nullptr;
 	try
 	{
-		Renderer rend = Renderer(Window::getInstance());
+		Renderer *rend = new Renderer(Window::getInstance());
 		ret = new Texture(rend);
 	}
 	catch (std::exception)

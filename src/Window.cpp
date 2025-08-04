@@ -1,5 +1,8 @@
 #include "../inc/Window.hpp"
 
+Window*		Window::_instance = nullptr;
+std::mutex	Window::_mtx;
+
 Window::~Window(void)
 {
 	SDL_DestroyWindow(_sdl_window);
