@@ -23,9 +23,8 @@ void	run_event_loop(Texture *canvas)
 			for (int j = 0; j < x; ++j)
 			{
 				Uint32 pixel_color =
-					//(i % 255 << 24 | (i / 255) % 255 << 16 |
-					 //(i / (255 * 255)) % 255 << 8 | 255);
-					 (255 << 24 | 255 << 16 | 255 << 8 | 255);
+					(i % 255 << 24 | (i / 255) % 255 << 16 |
+					(i / (255 * 255)) % 255 << 8 | 255);
 				pixel_buffer[i * (pitch / sizeof(Uint32)) + j] = pixel_color;
 			}
 		}

@@ -27,7 +27,7 @@ SDL_Window*	Window::getWindow(void) const
 Window::Window(void)
 {
 	_sdl_window = SDL_CreateWindow
-		("Raytracer", 1920, 1080, SDL_WINDOW_FULLSCREEN);
+		("Raytracer", 1920, 1080, 0);
 	if (_sdl_window == nullptr)
 		throw (std::runtime_error("Failed to create SDL Window"));
 }
