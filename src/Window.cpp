@@ -26,8 +26,16 @@ SDL_Window*	Window::getWindow(void) const
 
 Window::Window(void)
 {
+	SDL_DisplayID id = SDL_GetPrimaryDisplay();
+	if (id == 0)
+		throw (std::runtime_error("Failed to get display"));
+
+	SDL_Rect bounds;
+	if (!SDL_GetDisplayBounds(id, &bounds))
+		throw (std::runtime_error("Failed to get display bounds"));
+
 	_sdl_window = SDL_CreateWindow
-		("Raytracer", 1920, 1080, 0);
+		("Raytracer", bounds.w, bounds.h, SDL_WINDOW_FULLSCREEN);
 	if (_sdl_window == nullptr)
 		throw (std::runtime_error("Failed to create SDL Window"));
 }
