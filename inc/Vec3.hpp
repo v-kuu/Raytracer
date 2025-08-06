@@ -8,6 +8,7 @@ struct	Vec3
 	float y;
 	float z;
 
+	Vec3(void);
 	Vec3(float xi, float yi, float zi);
 
 	Vec3	operator+(const Vec3 &other) const;

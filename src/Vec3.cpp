@@ -1,5 +1,9 @@
 #include "../inc/Vec3.hpp"
 
+Vec3::Vec3(void) : x(0), y(0), z(0)
+{
+}
+
 Vec3::Vec3(float xi, float yi, float zi) : x(xi), y(yi), z(zi)
 {
 }
