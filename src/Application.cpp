@@ -49,12 +49,16 @@ void	Application::run(void)
 	Camera	cam = Camera(90, Vec3(0, 0, 0), Vec3(0, 0, -1));
 	Sphere	sp = Sphere(2, Vec3(0, 0, -5));
 
+	SDL_Event event;
 	while (true)
 	{
+		SDL_PollEvent(&event);
+		if (event.type == SDL_EVENT_KEY_DOWN)
+			if (event.key.key == SDLK_ESCAPE)
+				break ;
 		if (!SDL_LockTexture(_canvas->getTexture(), NULL, &pixels, &pitch))
 			throw (std::runtime_error("Could not lock SDL texture"));
 		pixel_buffer = static_cast<Uint32*>(pixels);
-		//render frame
 		int	x, y;
 		if (!SDL_GetWindowSizeInPixels(Window::getInstance()->getWindow(), &x, &y))
 		{

@@ -30,9 +30,9 @@ AHittable::Hit	Sphere::detectHit(Ray ray)
 	float t1 = (b - sqrtf(discriminant)) / a;
 	float t2 = (b + sqrtf(discriminant)) / a;
 	if (t1 >= 0)
-		return (Hit(t1, (_pos - rayAt(ray, t1)).normalize()));
+		return (Hit(t1, (rayAt(ray, t1) - _pos).normalize()));
 	else if (t2 >= 0)
-		return (Hit(t2, ((_pos - rayAt(ray, t2)).normalize()) * -1));
+		return (Hit(t2, ((rayAt(ray, t2) - _pos).normalize()) * -1));
 	else
 		return (Hit(NAN, Vec3(0, 0, 0)));
 }
