@@ -18,6 +18,8 @@ class	AHittable
 		{
 			float	t;
 			Vec3	normal;
+
+			Hit(float t, Vec3 normal);
 		};
 		virtual Hit	detectHit(Ray ray) = 0;
 

@@ -39,3 +39,9 @@ Camera&	Camera::operator=(const Camera &other)
 	_pixel_zero = other._pixel_zero;
 	return (*this);
 }
+
+Ray	Camera::pixelRay(int x, int y) const
+{
+	Vec3 pixel_center = _pixel_zero + (_delta_u * x + _delta_v * y);
+	return (Ray(_orig, pixel_center - _orig));
+}

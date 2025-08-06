@@ -1,6 +1,8 @@
 #pragma once
 #include "Vec3.hpp"
 #include "Window.hpp"
+#include "Ray.hpp"
+#include "Sphere.hpp"
 
 class	Camera
 {
@@ -10,6 +12,8 @@ class	Camera
 		~Camera(void) = default;
 		Camera(const Camera &other);
 		Camera	&operator=(const Camera &other);
+
+		Ray	pixelRay(int x, int y) const;
 
 	private:
 		float	_fov_rad;

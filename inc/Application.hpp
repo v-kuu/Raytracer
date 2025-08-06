@@ -1,6 +1,8 @@
 #pragma once
 #include "Renderer.hpp"
 #include "Texture.hpp"
+#include "Camera.hpp"
+#include "Ray.hpp"
 
 class	Application
 {
