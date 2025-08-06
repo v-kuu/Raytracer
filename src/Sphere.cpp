@@ -32,7 +32,18 @@ AHittable::Hit	Sphere::detectHit(Ray ray)
 	if (t1 >= 0)
 		return (Hit(t1, (_pos - rayAt(ray, t1)).normalize()));
 	else if (t2 >= 0)
-		return (Hit(t2, (_pos - rayAt(ray, t2)).normalize()));
+		return (Hit(t2, ((_pos - rayAt(ray, t2)).normalize()) * -1));
 	else
 		return (Hit(NAN, Vec3(0, 0, 0)));
+}
+
+float	Sphere::getRadius(void) const
+{
+	return (_radius);
+}
+
+std::ostream	&operator<<(std::ostream &os, const Sphere &sp)
+{
+	std::cout << "Sphere, radius: " << sp.getRadius() << ", center: " << sp.getPos();
+	return (os);
 }

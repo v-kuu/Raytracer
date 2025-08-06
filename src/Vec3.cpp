@@ -34,6 +34,12 @@ Vec3	Vec3::normalize(void) const
 	return (*this / this->length());
 }
 
+std::ostream	&operator<<(std::ostream &os, const Vec3 &vec)
+{
+	std::cout << "{" << vec.x << ", " << vec.y << ", " << vec.z << "}";
+	return (os);
+}
+
 float	dot(const Vec3 &lhs, const Vec3 &rhs)
 {
 	return (lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z);

@@ -12,6 +12,10 @@ class	Sphere : public AHittable
 
 		Hit	detectHit(Ray ray) override;
 
+		float	getRadius(void) const;
+
 	private:
 		float	_radius;
 };
+
+std::ostream	&operator<<(std::ostream &os, const Sphere &sp);

@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+#include <iostream>
 
 struct	Vec3
 {
@@ -17,6 +18,8 @@ struct	Vec3
 	float	length(void) const;
 	Vec3	normalize(void) const;
 };
+
+std::ostream	&operator<<(std::ostream &os, const Vec3 &vec);
 
 float	dot(const Vec3 &lhs, const Vec3 &rhs);
 Vec3	cross(const Vec3 &lhs, const Vec3 &rhs);
