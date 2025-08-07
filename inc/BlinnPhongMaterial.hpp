@@ -1,5 +1,7 @@
 #pragma once
 #include "IMaterial.hpp"
+#include "AmbientLight.hpp"
+#include <algorithm>
 
 class	BlinnPhongMaterial : public IMaterial
 {
@@ -14,7 +16,8 @@ class	BlinnPhongMaterial : public IMaterial
 					const PointLight &l) override;
 
 	private:
-		static float	_shininess;
+		static float		_shininess;
+		static AmbientLight	_a;
 
 		float	_red;
 		float	_green;

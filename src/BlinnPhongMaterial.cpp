@@ -1,6 +1,7 @@
 #include "../inc/BlinnPhongMaterial.hpp"
 
-float BlinnPhongMaterial::_shininess = 32.0f;
+float			BlinnPhongMaterial::_shininess = 32.0f;
+AmbientLight	BlinnPhongMaterial::_a = AmbientLight(255, 255, 255, 0.2);
 
 BlinnPhongMaterial::BlinnPhongMaterial(float r, float g, float b)
 	: _red(r), _green(g), _blue(b)
@@ -29,8 +30,23 @@ Uint32	BlinnPhongMaterial::shade(const Ray &ray, const AHittable::Hit &hit,
 	Vec3 view_dir = (ray.dir * -1).normalize();
 	Vec3 halfway = (light_dir + view_dir).normalize();
 	float spec = powf(fmax(dot(hit.normal, halfway), 0.0f), _shininess);
-	return (static_cast<Uint8>(_red * spec) << 24
-			| static_cast<Uint8>(_green * spec) << 16
-			| static_cast<Uint8>(_blue * spec) << 8
-			| 0xFF);
+	float diff = fmax(dot(hit.normal, light_dir), 0.0f);
+
+	float ambient[3] = {_red * _a.getRed() * _a.getIntensity(),
+						_green * _a.getGreen() * _a.getIntensity(),
+						_blue * _a.getBlue() * _a.getIntensity()};
+	float diffuse[3] = {_red * l.getRed() * diff,
+						_green * l.getGreen() * diff,
+						_blue * l.getBlue() * diff};
+	float specular[3] = {l.getRed() * spec,
+						l.getGreen() * spec,
+						l.getBlue() * spec};
+	Uint8 red = static_cast<Uint8>(
+			std::clamp((ambient[0] + diffuse[0] + specular[0]), 0.0f, 255.0f));
+	Uint8 green = static_cast<Uint8>(
+			std::clamp((ambient[1] + diffuse[1] + specular[1]), 0.0f, 255.0f));
+	Uint8 blue = static_cast<Uint8>(
+			std::clamp((ambient[2] + diffuse[2] + specular[2]), 0.0f, 255.0f));
+
+	return (red << 24 | green << 16 | blue << 8 | 0xFF);
 }
