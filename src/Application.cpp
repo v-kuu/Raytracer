@@ -7,6 +7,7 @@ Application::Application(void) : _renderer(nullptr), _canvas(nullptr)
 {
 	if (!SDL_Init(SDL_INIT_VIDEO))
 		throw (std::runtime_error("Unable to initialize SDL"));
+
 	try
 	{
 		Window::getInstance();
@@ -15,6 +16,7 @@ Application::Application(void) : _renderer(nullptr), _canvas(nullptr)
 	{
 		throw ;
 	}
+
 	try
 	{
 		_renderer = new Renderer(Window::getInstance());
@@ -46,43 +48,45 @@ void	Application::run(void)
 	int		pitch;
 	Uint32	pixel_color;
 
+	int		w, h;
+	if (!SDL_GetWindowSizeInPixels(Window::getInstance()->getWindow(), &w, &h))
+	{
+		throw (std::runtime_error("Failed to get texture size"));
+	}
+
 	Camera	cam = Camera(90, Vec3(0, 0, 0), Vec3(0, 0, -1));
 	Sphere	sp = Sphere(2, Vec3(0, 0, -5));
 
-	SDL_Event event;
 	while (true)
 	{
-		SDL_PollEvent(&event);
-		if (event.type == SDL_EVENT_KEY_DOWN)
-			if (event.key.key == SDLK_ESCAPE)
-				break ;
+		SDL_Event event;
+		while (SDL_PollEvent(&event))
+		{
+			std::cout << "Event type: " << event.type << std::endl;
+			if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_QUIT)
+				return ;
+		}
 		if (!SDL_LockTexture(_canvas->getTexture(), NULL, &pixels, &pitch))
 			throw (std::runtime_error("Could not lock SDL texture"));
 		pixel_buffer = static_cast<Uint32*>(pixels);
-		int	x, y;
-		if (!SDL_GetWindowSizeInPixels(Window::getInstance()->getWindow(), &x, &y))
+		for (int y = 0; y < h; ++y)
 		{
-			throw (std::runtime_error("Failed to get texture size"));
-		}
-		for (int i = 0; i < y; ++i)
-		{
-			for (int j = 0; j < x; ++j)
+			for (int x = 0; x < w; ++x)
 			{
-				Ray	ray = cam.pixelRay(j, i);
+				Ray	ray = cam.pixelRay(x, y);
 				AHittable::Hit	hit = sp.detectHit(ray);
 				if (hit.t >= 0)
 					pixel_color = normal_shading(hit);
 				else
 					pixel_color = skybox(ray);
-				pixel_buffer[i * (pitch / sizeof(Uint32)) + j] = pixel_color;
+				pixel_buffer[y * (pitch / sizeof(Uint32)) + x] = pixel_color;
 			}
 		}
 		SDL_UnlockTexture(_canvas->getTexture());
 		SDL_RenderClear(_renderer->getRenderer());
 		SDL_RenderTexture(_renderer->getRenderer(), _canvas->getTexture(), NULL, NULL);
 		SDL_RenderPresent(_renderer->getRenderer());
-		SDL_Delay(2000);
-		break ;
+		SDL_Delay(16);
 	}
 }
 
