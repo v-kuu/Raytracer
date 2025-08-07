@@ -18,8 +18,9 @@ class	AHittable
 		{
 			float	t;
 			Vec3	normal;
+			Vec3	point;
 
-			Hit(float t, Vec3 normal);
+			Hit(float t, Vec3 normal, Vec3 point);
 		};
 		virtual Hit	detectHit(Ray ray) = 0;
 
@@ -27,6 +28,6 @@ class	AHittable
 		Vec3	getPos(void) const;
 
 	protected:
-		int		_type;
-		Vec3	_pos;
+		int					_type;
+		Vec3				_pos;
 };

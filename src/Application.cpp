@@ -1,6 +1,6 @@
 #include "../inc/Application.hpp"
 
-static Uint32	normal_shading(AHittable::Hit hit);
+//static Uint32	normal_shading(AHittable::Hit hit);
 static Uint32	skybox(Ray ray);
 
 Application::Application(void) : _renderer(nullptr), _canvas(nullptr)
@@ -54,15 +54,17 @@ void	Application::run(void)
 		throw (std::runtime_error("Failed to get texture size"));
 	}
 
+	// Temporary scene
 	Camera	cam = Camera(90, Vec3(0, 0, 0), Vec3(0, 0, -1));
-	Sphere	sp = Sphere(2, Vec3(0, 0, -5));
+	BlinnPhongMaterial	mat = BlinnPhongMaterial(255, 126, 126);
+	Sphere	sp = Sphere(2, Vec3(0, 0, -5), mat);
+	PointLight L = PointLight(255, 255, 255, 1.0f, Vec3(-5, 10, -5));
 
 	while (true)
 	{
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
-			std::cout << "Event type: " << event.type << std::endl;
 			if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_QUIT)
 				return ;
 		}
@@ -76,7 +78,8 @@ void	Application::run(void)
 				Ray	ray = cam.pixelRay(x, y);
 				AHittable::Hit	hit = sp.detectHit(ray);
 				if (hit.t >= 0)
-					pixel_color = normal_shading(hit);
+					//pixel_color = normal_shading(hit);
+					pixel_color = sp.getMat().shade(ray, hit, L);
 				else
 					pixel_color = skybox(ray);
 				pixel_buffer[y * (pitch / sizeof(Uint32)) + x] = pixel_color;
@@ -89,7 +92,7 @@ void	Application::run(void)
 		SDL_Delay(16);
 	}
 }
-
+/*
 static Uint32	normal_shading(AHittable::Hit hit)
 {
 	float	x = (hit.normal.x + 1.0f) * 0.5f;
@@ -100,7 +103,7 @@ static Uint32	normal_shading(AHittable::Hit hit)
 	Uint8 green = static_cast<Uint8>(255.0f * y);
 	Uint8 blue = static_cast<Uint8>(255.0f * z);
 	return (red << 24 | green << 16 | blue << 8 | 255);
-}
+}*/
 
 static Uint32	skybox(Ray ray)
 {

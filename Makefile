@@ -20,12 +20,15 @@ SDL				= vendored/SDL/build/libSDL3.a
 
 SOURCES			= src/main.cpp src/Window.cpp src/Renderer.cpp src/Texture.cpp \
 				  src/Application.cpp src/AHittable.cpp src/Ray.cpp src/Sphere.cpp \
-				  src/Vec3.cpp src/Camera.cpp
+				  src/Vec3.cpp src/Camera.cpp src/ALight.cpp src/BlinnPhongMaterial.cpp \
+				  src/PointLight.cpp
 
 OBJDIR			= obj
 
 HEADERS			= inc/Window.hpp inc/Renderer.hpp inc/Texture.hpp inc/Application.hpp \
-				  inc/AHittable.hpp inc/Ray.hpp inc/Sphere.hpp inc/Vec3.hpp inc/Camera.hpp
+				  inc/AHittable.hpp inc/Ray.hpp inc/Sphere.hpp inc/Vec3.hpp inc/Camera.hpp \
+				  inc/ALight.hpp inc/PointLight.hpp inc/IMaterial.hpp \
+				  inc/BlinnPhongMaterial.hpp
 
 OBJECTS			= $(SOURCES:%.cpp=$(OBJDIR)/%.o)
 
