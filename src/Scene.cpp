@@ -10,8 +10,8 @@ Scene::Scene(void) : _cam(new Camera(90, Vec3(0, 0, 0), Vec3(0, 0, -1)))
 {
 	IMaterial *mat = new BlinnPhongMaterial(1.0f, 0.5f, 0.5f);
 	IMaterial *mat2 = new BlinnPhongMaterial(0.5f, 0.5f, 1.0f);
-	_objects.push_back(new Sphere(2, Vec3(0, 0, -5), mat));
-	_objects.push_back(new Sphere(2, Vec3(3, 0, -2), mat2));
+	_objects.push_back(new Sphere(2, Vec3(0, 0, -10), mat));
+	_objects.push_back(new Sphere(2, Vec3(-1, 5, -5), mat2));
 	_lights.push_back(new PointLight(1.0f, 1.0f, 1.0f, 1.0f, Vec3(-5, 10, -5)));
 }
 
@@ -46,8 +46,8 @@ void	Scene::render(Texture *target)
 	Uint32	*pixel_buffer;
 	int		pitch;
 	Uint32	pixel_color;
-
 	int		w, h;
+
 	if (!SDL_GetWindowSizeInPixels(Window::getInstance()->getWindow(), &w, &h))
 	{
 		throw (std::runtime_error("Failed to get texture size"));
