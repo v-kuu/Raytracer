@@ -18,7 +18,7 @@ Scene::~Scene(void)
 	delete _cam;
 	for (AHittable* ptr : _objects)
 		delete ptr;
-	for (ALight*  ptr : _lights)
+	for (ALight* ptr : _lights)
 		delete ptr;
 }
 
@@ -36,8 +36,6 @@ Scene&	Scene::operator=(const Scene &other)
 	_lights = other._lights;
 	return (*this);
 }
-
-#include <float.h>
 
 void	Scene::render(Texture *target)
 {
@@ -62,7 +60,7 @@ void	Scene::render(Texture *target)
 			Ray	ray = _cam->pixelRay(x, y);
 			int	obj_index = 0;
 			HitRecord hit = find_closest(_objects, ray, obj_index);
-			if (hit.t >= 0 && hit.t < FLT_MAX)
+			if (hit.t >= 0 && hit.t < std::numeric_limits<float>::max())
 				pixel_color = _objects[0]->getMat()->shade(ray, hit, *this);
 			else
 				pixel_color = skybox(ray);
@@ -77,13 +75,15 @@ void	Scene::render(Texture *target)
 
 static HitRecord	find_closest(std::vector<AHittable*> &objects, Ray &ray, int &i)
 {
-	HitRecord closest = HitRecord(FLT_MAX, Vec3(0, 0 ,0), Vec3(0, 0, 0));
-	while (i < static_cast<int>(objects.size()))
+	HitRecord closest = HitRecord(std::numeric_limits<float>::max(), Vec3(0, 0 ,0), Vec3(0, 0, 0));
+	for (unsigned long j = 0; j < objects.size(); ++j)
 	{
 		HitRecord hit = objects[i]->detectHit(ray);
 		if (hit.t < closest.t && hit.t >= 0)
+		{
 			closest = hit;
-		i++;
+			i = static_cast<int>(j);
+		}
 	}
 	return (closest);
 }
