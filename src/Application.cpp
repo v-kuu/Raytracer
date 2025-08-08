@@ -56,9 +56,9 @@ void	Application::run(void)
 
 	// Temporary scene
 	Camera	cam = Camera(90, Vec3(0, 0, 0), Vec3(0, 0, -1));
-	BlinnPhongMaterial	mat = BlinnPhongMaterial(255, 126, 126);
+	BlinnPhongMaterial	mat = BlinnPhongMaterial(1.0f, 0.5f, 0.5f);
 	Sphere	sp = Sphere(2, Vec3(0, 0, -5), mat);
-	PointLight L = PointLight(255, 255, 255, 1.0f, Vec3(-5, 10, -5));
+	PointLight L = PointLight(1.0f, 1.0f, 1.0f, 1.0f, Vec3(-5, 10, -5));
 
 	while (true)
 	{
