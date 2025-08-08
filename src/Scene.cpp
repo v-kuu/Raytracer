@@ -9,7 +9,9 @@ static Uint32	skybox(Ray ray);
 Scene::Scene(void) : _cam(new Camera(90, Vec3(0, 0, 0), Vec3(0, 0, -1)))
 {
 	IMaterial *mat = new BlinnPhongMaterial(1.0f, 0.5f, 0.5f);
+	IMaterial *mat2 = new BlinnPhongMaterial(0.5f, 0.5f, 1.0f);
 	_objects.push_back(new Sphere(2, Vec3(0, 0, -5), mat));
+	_objects.push_back(new Sphere(2, Vec3(3, 0, -2), mat2));
 	_lights.push_back(new PointLight(1.0f, 1.0f, 1.0f, 1.0f, Vec3(-5, 10, -5)));
 }
 
@@ -61,7 +63,7 @@ void	Scene::render(Texture *target)
 			int	obj_index = 0;
 			HitRecord hit = find_closest(_objects, ray, obj_index);
 			if (hit.t >= 0 && hit.t < std::numeric_limits<float>::max())
-				pixel_color = _objects[0]->getMat()->shade(ray, hit, *this);
+				pixel_color = _objects[obj_index]->getMat()->shade(ray, hit, *this);
 			else
 				pixel_color = skybox(ray);
 			pixel_buffer[y * (pitch / sizeof(Uint32)) + x] = pixel_color;
@@ -78,7 +80,7 @@ static HitRecord	find_closest(std::vector<AHittable*> &objects, Ray &ray, int &i
 	HitRecord closest = HitRecord(std::numeric_limits<float>::max(), Vec3(0, 0 ,0), Vec3(0, 0, 0));
 	for (unsigned long j = 0; j < objects.size(); ++j)
 	{
-		HitRecord hit = objects[i]->detectHit(ray);
+		HitRecord hit = objects[j]->detectHit(ray);
 		if (hit.t < closest.t && hit.t >= 0)
 		{
 			closest = hit;
