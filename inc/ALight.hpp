@@ -1,21 +1,24 @@
 #pragma once
+#include "Vec3.hpp"
 #include <stdexcept>
 
 class	ALight
 {
 	public:
 		ALight(void) = delete;
-		ALight(float red, float green, float blue, float intensity);
+		ALight(float red, float green, float blue, float intensity, Vec3 pos);
 		virtual	~ALight(void) = default;
 
 		float	getRed(void) const;
 		float	getGreen(void) const;
 		float	getBlue(void) const;
 		float	getIntensity(void) const;
+		Vec3	getPos(void) const;
 
 	protected:
 		float	_red;
 		float	_green;
 		float	_blue;
 		float	_intensity;
+		Vec3	_pos;
 };

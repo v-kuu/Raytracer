@@ -1,24 +1,21 @@
 #pragma once
 #include "AHittable.hpp"
-#include "BlinnPhongMaterial.hpp"
 
 class	Sphere : public AHittable
 {
 	public:
 		Sphere(void) = delete;
-		Sphere(float radius, Vec3 center, BlinnPhongMaterial &mat);
-		~Sphere(void) = default;
+		Sphere(float radius, Vec3 center, IMaterial *mat);
+		~Sphere(void);
 		Sphere(const Sphere &other);
 		Sphere	&operator=(const Sphere &other);
 
-		Hit	detectHit(Ray ray) override;
+		HitRecord	detectHit(Ray &ray) override;
 
-		float				getRadius(void) const;
-		BlinnPhongMaterial	&getMat(void) const;
+		float	getRadius(void) const;
 
 	private:
-		float				_radius;
-		BlinnPhongMaterial	&_mat;
+		float	_radius;
 };
 
 std::ostream	&operator<<(std::ostream &os, const Sphere &sp);

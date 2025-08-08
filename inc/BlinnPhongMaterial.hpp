@@ -1,6 +1,8 @@
 #pragma once
 #include "IMaterial.hpp"
 #include "AmbientLight.hpp"
+#include "Scene.hpp"
+#include "HitRecord.hpp"
 #include <algorithm>
 
 class	BlinnPhongMaterial : public IMaterial
@@ -12,8 +14,7 @@ class	BlinnPhongMaterial : public IMaterial
 		BlinnPhongMaterial(const BlinnPhongMaterial &other);
 		BlinnPhongMaterial	&operator=(const BlinnPhongMaterial &other);
 
-		Uint32	shade(const Ray &ray, const AHittable::Hit &hit,
-					const PointLight &l) override;
+		Uint32	shade(const Ray &ray, const HitRecord &hit, const Scene &sc) override;
 
 	private:
 		static float		_shininess;

@@ -2,7 +2,7 @@
 #include "Vec3.hpp"
 #include "Window.hpp"
 #include "Ray.hpp"
-#include "Sphere.hpp"
+#include "AHittable.hpp"
 
 class	Camera
 {

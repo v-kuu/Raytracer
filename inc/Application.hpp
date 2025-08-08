@@ -1,10 +1,7 @@
 #pragma once
 #include "Renderer.hpp"
 #include "Texture.hpp"
-#include "Camera.hpp"
-#include "Ray.hpp"
-#include "PointLight.hpp"
-#include "BlinnPhongMaterial.hpp"
+#include "Scene.hpp"
 
 class	Application
 {
