@@ -40,7 +40,7 @@ Vec3	Vec3::normalize(void) const
 
 std::ostream	&operator<<(std::ostream &os, const Vec3 &vec)
 {
-	std::cout << "{" << vec.x << ", " << vec.y << ", " << vec.z << "}";
+	os << "{" << vec.x << ", " << vec.y << ", " << vec.z << "}";
 	return (os);
 }
 

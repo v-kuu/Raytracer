@@ -43,15 +43,44 @@ Application::~Application(void)
 void	Application::run(void)
 {
 	Scene	scene = Scene();
+	Quaternion right(5, Vec3(0, -1, 0));
+	Quaternion left = right.inverse();
+	Quaternion up(5, Vec3(1, 0, 0));
+	Quaternion down = up.inverse();
 	while (true)
 	{
 		SDL_Event event;
+		bool to_render = true;
 		while (SDL_PollEvent(&event))
 		{
-			if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_QUIT)
+			if ((event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE)
+					|| event.type == SDL_EVENT_QUIT)
 				return ;
+			if (event.type == SDL_EVENT_KEY_DOWN)
+			{
+				to_render = true;
+				switch (event.key.key)
+				{
+					case (SDLK_RIGHT):
+						scene.getCam()->rotate(right);
+						break ;
+					case (SDLK_LEFT):
+						scene.getCam()->rotate(left);
+						break ;
+					case (SDLK_UP):
+						scene.getCam()->rotate(up);
+
+						break ;
+					case (SDLK_DOWN):
+						scene.getCam()->rotate(down);
+				}
+			}
 		}
-		scene.render(_canvas);
+		if (to_render)
+		{
+			scene.render(_canvas);
+			to_render = false;
+		}
 		SDL_Delay(16);
 	}
 }

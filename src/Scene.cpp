@@ -6,7 +6,7 @@
 static HitRecord find_closest(std::vector<AHittable*> &objects, Ray &ray, int &i);
 static Uint32	skybox(Ray ray);
 
-Scene::Scene(void) : _cam(new Camera(90, Vec3(0, -10, -7), Vec3(0, 1, 0)))
+Scene::Scene(void) : _cam(new Camera(90, Vec3(0, 0, 0), Vec3(0, 0, -1)))
 {
 	IMaterial *mat = new BlinnPhongMaterial(1.0f, 0.5f, 0.5f);
 	IMaterial *mat2 = new BlinnPhongMaterial(0.5f, 0.5f, 1.0f);
@@ -98,6 +98,11 @@ static Uint32	skybox(Ray ray)
 	Uint8 green = (0xFF - 0xBB) * fraction + (0xBB);
 	Uint8 blue = (0xFF - 0xFF) * fraction + (0xFF);
 	return (red << 24 | green << 16 | blue << 8 | 0xFF);
+}
+
+Camera*	Scene::getCam(void) const
+{
+	return (_cam);
 }
 
 const std::vector<AHittable*>& Scene::getObjects(void) const

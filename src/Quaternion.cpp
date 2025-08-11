@@ -9,6 +9,15 @@ Quaternion::Quaternion(float w, float x, float y, float z)
 {
 }
 
+Quaternion::Quaternion(float angle_deg, Vec3 axis)
+{
+	float angle_rad = angle_deg * (M_PI / 180);
+	w = cos(angle_rad / 2);
+	x = axis.x * sin(angle_rad / 2);
+	y = axis.y * sin(angle_rad / 2);
+	z = axis.z * sin(angle_rad / 2);
+}
+
 Quaternion::Quaternion(Vec3 from, Vec3 to)
 {
 	float dot_p = dot(from, to);
@@ -69,4 +78,11 @@ Quaternion	Quaternion::normalize(void) const
 Quaternion	Quaternion::inverse(void) const
 {
 	return (Quaternion(w, -x , -y, -z));
+}
+
+std::ostream	&operator<<(std::ostream &os, const Quaternion quat)
+{
+	os << "{" << quat.w << ", " << quat.x << ", " << quat.y << ", " << quat.z
+		<< "}";
+	return (os);
 }

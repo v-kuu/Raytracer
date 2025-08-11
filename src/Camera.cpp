@@ -38,8 +38,36 @@ Camera&	Camera::operator=(const Camera &other)
 	return (*this);
 }
 
+Quaternion	Camera::getOrientation(void) const
+{
+	return (_orientation);
+}
+
 Ray	Camera::pixelRay(int x, int y) const
 {
 	Vec3 pixel_center = _pixel_zero + (_delta_u * x + _delta_v * y);
 	return (Ray(_orig, pixel_center - _orig));
+}
+
+void	Camera::rotate(Quaternion quat)
+{
+	int width, height;
+	if (!SDL_GetWindowSizeInPixels
+			(Window::getInstance()->getWindow(), &width, &height))
+		throw (std::runtime_error("Failed to get window size"));
+
+	_orientation = (quat * _orientation).normalize();
+	_dir = _orientation.rotate(_dir).normalize();
+	_delta_u = _orientation.rotate(Vec3(1, 0, 0));
+	_delta_v = _orientation.rotate(Vec3(0, -1, 0));
+	float focal_length = (static_cast<float>(width) / 2) / (tan(_fov_rad / 2));
+	Vec3 center = (_dir * focal_length) + _orig;
+	Vec3 upper_left = center - (_delta_v * height / 2) - (_delta_u * width / 2);
+	_pixel_zero = upper_left + ((_delta_u + _delta_v) * 0.5f);
+}
+
+std::ostream	&operator<<(std::ostream &os, const Camera &cam)
+{
+	os << "Orientation: " << cam.getOrientation();
+	return (os);
 }

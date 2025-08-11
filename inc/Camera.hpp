@@ -14,7 +14,10 @@ class	Camera
 		Camera(const Camera &other);
 		Camera	&operator=(const Camera &other);
 
-		Ray	pixelRay(int x, int y) const;
+		Quaternion	getOrientation(void) const;
+
+		Ray		pixelRay(int x, int y) const;
+		void	rotate(Quaternion quat);
 
 	private:
 		float		_fov_rad;
@@ -25,3 +28,5 @@ class	Camera
 		Vec3		_delta_v;
 		Vec3		_pixel_zero;
 };
+
+std::ostream	&operator<<(std::ostream &os, const Camera &cam);

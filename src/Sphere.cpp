@@ -56,6 +56,6 @@ float	Sphere::getRadius(void) const
 
 std::ostream	&operator<<(std::ostream &os, const Sphere &sp)
 {
-	std::cout << "Sphere, radius: " << sp.getRadius() << ", center: " << sp.getPos();
+	os << "Sphere, radius: " << sp.getRadius() << ", center: " << sp.getPos();
 	return (os);
 }

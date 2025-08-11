@@ -6,7 +6,7 @@ Ray::Ray(Vec3 origin, Vec3 direction) : orig(origin), dir(direction)
 
 std::ostream	&operator<<(std::ostream &os, const Ray &ray)
 {
-	std::cout << "Origin: " << ray.orig << ", Direction: " << ray.dir;
+	os << "Origin: " << ray.orig << ", Direction: " << ray.dir;
 	return (os);
 }
 

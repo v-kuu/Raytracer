@@ -22,8 +22,9 @@ class	Scene
 
 		void	render(Texture *target);
 
+		Camera							*getCam(void) const;
 		const std::vector<AHittable*>	&getObjects(void) const;
-		const std::vector<ALight*>	&getLights(void) const;
+		const std::vector<ALight*>		&getLights(void) const;
 
 	private:
 		Camera					*_cam;

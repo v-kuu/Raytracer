@@ -13,7 +13,7 @@
 NAME 			= raytracer
 CC 				= c++
 CFLAGS 			= -Wall -Wextra -Werror -std=c++20 -Ivendored/SDL/include/
-#OFLAGS			= -O3 -flto -march=native
+OFLAGS			= -O3 -flto -march=native
 RM 				= rm -rf
 
 SDL				= vendored/SDL/build/libSDL3.a
@@ -36,13 +36,13 @@ OBJECTS			= $(SOURCES:%.cpp=$(OBJDIR)/%.o)
 
 $(OBJDIR)/%.o:			%.cpp $(HEADERS)
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(OFLAGS) -c $< -o $@
 
 all: 			$(NAME)
 
 $(NAME):		$(SDL) $(OBJECTS) $(HEADERS)
 	@echo -n "Compiling $(NAME)..."
-	@$(CC) $(CFLAGS) $(OBJECTS) $(SDL) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OFLAGS) $(OBJECTS) $(SDL) -o $(NAME)
 	@echo " Done."
 
 $(SDL):
