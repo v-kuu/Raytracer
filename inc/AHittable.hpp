@@ -3,6 +3,7 @@
 #include "Ray.hpp"
 #include "IMaterial.hpp"
 #include "HitRecord.hpp"
+#include "AABB.hpp"
 
 enum	e_hit_type
 {
@@ -20,12 +21,14 @@ class	AHittable
 
 		virtual HitRecord	detectHit(Ray &ray) = 0;
 
-		int			getType(void) const;
+		const AABB	&getBoundingBox(void) const;
 		Vec3		getPos(void) const;
+		int			getType(void) const;
 		IMaterial	*getMat(void) const;
 
 	protected:
-		int					_type;
-		Vec3				_pos;
-		IMaterial			*_mat;
+		AABB		_bounding_box;
+		Vec3		_pos;
+		int			_type;
+		IMaterial	*_mat;
 };

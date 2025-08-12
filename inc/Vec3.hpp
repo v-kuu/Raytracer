@@ -11,10 +11,12 @@ struct	Vec3
 	Vec3(void);
 	Vec3(float xi, float yi, float zi);
 
-	Vec3	operator+(const Vec3 &other) const;
-	Vec3	operator-(const Vec3 &other) const;
-	Vec3	operator*(float scalar) const;
-	Vec3	operator/(float scalar) const;
+	Vec3			operator+(const Vec3 &other) const;
+	Vec3			operator-(const Vec3 &other) const;
+	Vec3			operator*(float scalar) const;
+	Vec3			operator/(float scalar) const;
+	float			&operator[](unsigned int i);
+	const float		&operator[](unsigned int i) const;
 
 	float	length(void) const;
 	Vec3	normalize(void) const;

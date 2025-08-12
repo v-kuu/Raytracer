@@ -28,6 +28,36 @@ Vec3	Vec3::operator/(float scalar) const
 	return (Vec3(x / scalar, y / scalar, z / scalar));
 }
 
+float&	Vec3::operator[](unsigned int i)
+{
+	switch (i)
+	{
+		case (0):
+			return (x);
+		case (1):
+			return (y);
+		case (2):
+			return (z);
+		default:
+			throw (std::runtime_error("Vec3 index out of bounds"));
+	}
+}
+
+const float&	Vec3::operator[](unsigned int i) const
+{
+	switch (i)
+	{
+		case (0):
+			return (x);
+		case (1):
+			return (y);
+		case (2):
+			return (z);
+		default:
+			throw (std::runtime_error("Vec3 index out of bounds"));
+	}
+}
+
 float	Vec3::length(void) const
 {
 	return (sqrtf(x * x + y * y + z * z));

@@ -3,6 +3,8 @@
 Sphere::Sphere(float radius, Vec3 center, IMaterial *mat)
 	: AHittable(SPHERE, center, mat), _radius(radius)
 {
+	Vec3 radius_vec(radius, radius, radius);
+	_bounding_box = AABB(center - radius_vec, center + radius_vec);
 }
 
 Sphere::~Sphere(void)
@@ -13,6 +15,7 @@ Sphere::~Sphere(void)
 Sphere::Sphere(const Sphere &other)
 	: AHittable(SPHERE, other._pos, other._mat), _radius(other._radius)
 {
+	_bounding_box = other._bounding_box;
 }
 
 Sphere&	Sphere::operator=(const Sphere &other)
@@ -20,6 +23,7 @@ Sphere&	Sphere::operator=(const Sphere &other)
 	_pos = other._pos;
 	_radius = other._radius;
 	_mat = other._mat;
+	_bounding_box = other._bounding_box;
 	return (*this);
 }
 
