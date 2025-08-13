@@ -1,6 +1,6 @@
 #include "../inc/Texture.hpp"
 
-Texture::Texture(Renderer *renderer) : _renderer(renderer)
+Texture::Texture(std::shared_ptr<Renderer> renderer) : _renderer(renderer)
 {
 	int width, height;
 
@@ -21,7 +21,6 @@ Texture::Texture(Renderer *renderer) : _renderer(renderer)
 Texture::~Texture(void)
 {
 	SDL_DestroyTexture(_texture);
-	delete _renderer;
 }
 
 SDL_Texture*	Texture::getTexture(void)
@@ -29,7 +28,7 @@ SDL_Texture*	Texture::getTexture(void)
 	return (_texture);
 }
 
-Renderer*	Texture::getRenderer(void)
+std::shared_ptr<Renderer>	Texture::getRenderer(void)
 {
 	return (_renderer);
 }

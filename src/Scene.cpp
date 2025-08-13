@@ -30,9 +30,9 @@ Scene&	Scene::operator=(const Scene &other)
 	return (*this);
 }
 
-void	Scene::render(Texture *target)
+void	Scene::render(std::shared_ptr<Texture> target)
 {
-	Renderer *renderer = target->getRenderer();
+	std::shared_ptr<Renderer> renderer = target->getRenderer();
 	void	*pixels;
 	Uint32	*pixel_buffer;
 	int		pitch;

@@ -4,17 +4,16 @@
 
 int	main(void)
 {
-	Application	*raytracer = nullptr;
 	try
 	{
-		raytracer = new Application();
+		std::shared_ptr<Application> raytracer = std::make_shared<Application>();
 		raytracer->run();
 	}
 	catch (std::exception &e)
 	{
 		std::cerr << "Raytracer error: " << e.what() << std::endl;
 		std::cerr << SDL_GetError() << std::endl;
+		return (1);
 	}
-	delete raytracer;
 	return (0);
 }

@@ -18,8 +18,8 @@ Application::Application(void) : _renderer(nullptr), _canvas(nullptr)
 
 	try
 	{
-		_renderer = new Renderer(Window::getInstance());
-		_canvas = new Texture(_renderer);
+		_renderer = std::make_shared<Renderer>(Window::getInstance());
+		_canvas = std::make_shared<Texture>(_renderer);
 	}
 	catch (std::exception)
 	{
@@ -29,7 +29,6 @@ Application::Application(void) : _renderer(nullptr), _canvas(nullptr)
 
 Application::~Application(void)
 {
-	delete _canvas;
 	try
 	{
 		Window::getInstance()->~Window();

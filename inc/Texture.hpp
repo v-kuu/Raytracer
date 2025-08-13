@@ -1,17 +1,18 @@
 #pragma once
+#include <memory>
 #include <SDL3/SDL.h>
 #include "Renderer.hpp"
 
 class	Texture
 {
 	public:
-		Texture(Renderer *renderer);
+		Texture(std::shared_ptr<Renderer> renderer);
 		~Texture(void);
 
-		SDL_Texture	*getTexture(void);
-		Renderer	*getRenderer(void);
+		SDL_Texture					*getTexture(void);
+		std::shared_ptr<Renderer>	getRenderer(void);
 
 	private:
-		SDL_Texture	*_texture;
-		Renderer	*_renderer;
+		SDL_Texture					*_texture;
+		std::shared_ptr<Renderer>	_renderer;
 };

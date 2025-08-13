@@ -23,7 +23,7 @@ class	Scene
 		Scene(const Scene &other);
 		Scene	&operator=(const Scene &other);
 
-		void	render(Texture *target);
+		void	render(std::shared_ptr<Texture> target);
 
 		std::shared_ptr<Camera>	getCam(void) const;
 		const std::vector<std::shared_ptr<AHittable>>	&getObjects(void) const;

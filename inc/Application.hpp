@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "Renderer.hpp"
 #include "Texture.hpp"
 #include "Scene.hpp"
@@ -14,6 +15,6 @@ class	Application
 		void	run(void);
 
 	private:
-		Renderer	*_renderer;
-		Texture		*_canvas;
+		std::shared_ptr<Renderer>	_renderer;
+		std::shared_ptr<Texture>	_canvas;
 };
