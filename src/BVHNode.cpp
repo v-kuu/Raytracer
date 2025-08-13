@@ -32,16 +32,29 @@ bool	BVHNode::operator<(const BVHNode &other)
 
 HitRecord	BVHNode::intersect(const Ray &ray) const
 {
+	HitRecord	closest(std::numeric_limits<float>::max());
+
 	if (volume.intersect(ray))
 	{
 		if (isLeaf())
-			return (objects[0]->detectHit(ray));
+		{
+			HitRecord hit = objects[0]->detectHit(ray);
+			return (hit);
+		}
 		if (left->volume.intersect(ray))
-			return (left->intersect(ray));
+		{
+			HitRecord hit = left->intersect(ray);
+			if (hit.t < closest.t && hit.t >= 0)
+				closest = hit;
+		}
 		if (right->volume.intersect(ray))
-			return (right->intersect(ray));
+		{
+			HitRecord hit = right->intersect(ray);
+			if (hit.t < closest.t && hit.t >= 0)
+				closest = hit;
+		}
 	}
-	return (HitRecord(NAN));
+	return (closest);
 }
 
 bool	BVHNode::isLeaf(void) const

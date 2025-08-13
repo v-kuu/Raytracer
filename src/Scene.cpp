@@ -10,8 +10,8 @@ Scene::Scene(void) : _cam(new Camera(90, Vec3(0, 0, 0), Vec3(0, 0, -1)))
 {
 	std::shared_ptr<IMaterial> mat = std::make_shared<BlinnPhongMaterial>(1.0f, 0.5f, 0.5f);
 	std::shared_ptr<IMaterial> mat2 = std::make_shared<BlinnPhongMaterial>(0.5f, 0.5f, 1.0f);
-	_objects.push_back(new Sphere(2, Vec3(0, 0, -10), mat));
-	_objects.push_back(new Sphere(2, Vec3(-1, 5, -5), mat2));
+	_objects.push_back(new Sphere(2, Vec3(2, 0, -10), mat));
+	_objects.push_back(new Sphere(2, Vec3(-3, 0, -5), mat2));
 	_lights.push_back(new PointLight(1.0f, 1.0f, 1.0f, 1.0f, Vec3(-5, 10, -5)));
 	_bvh = std::make_shared<BVHNode>(_objects);
 }

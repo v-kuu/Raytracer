@@ -56,13 +56,13 @@ bool	AABB::intersect(const Ray &ray) const
 		if (ray.orig[i] < min[i])
 		{
 			inside = false;
-			if (ray.dir[i])
+			if (ray.dir[i] != 0)
 				MaxT[i] = (min[i] - ray.orig[i]) / ray.dir[i];
 		}
 		else if (ray.orig[i] > max[i])
 		{
 			inside = false;
-			if (ray.dir[i])
+			if (ray.dir[i] != 0)
 				MaxT[i] = (max[i] - ray.orig[i]) / ray.dir[i];
 		}
 	}
