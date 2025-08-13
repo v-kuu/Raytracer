@@ -19,19 +19,19 @@ class	Scene
 {
 	public:
 		Scene(void);
-		~Scene(void);
+		~Scene(void) = default;
 		Scene(const Scene &other);
 		Scene	&operator=(const Scene &other);
 
 		void	render(Texture *target);
 
-		Camera							*getCam(void) const;
-		const std::vector<AHittable*>	&getObjects(void) const;
-		const std::vector<ALight*>		&getLights(void) const;
+		std::shared_ptr<Camera>	getCam(void) const;
+		const std::vector<std::shared_ptr<AHittable>>	&getObjects(void) const;
+		const std::vector<std::shared_ptr<ALight>>		&getLights(void) const;
 
 	private:
-		Camera						*_cam;
-		std::vector<AHittable*>		_objects;
-		std::vector<ALight*>		_lights;
-		std::shared_ptr<BVHNode>	_bvh;
+		std::shared_ptr<Camera>						_cam;
+		std::vector<std::shared_ptr<AHittable>>		_objects;
+		std::vector<std::shared_ptr<ALight>>		_lights;
+		std::shared_ptr<BVHNode>					_bvh;
 };

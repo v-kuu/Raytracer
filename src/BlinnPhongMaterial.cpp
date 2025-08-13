@@ -29,7 +29,7 @@ Uint32	BlinnPhongMaterial::shade(const Ray &ray, const HitRecord &hit, const Sce
 						_green * _a.getGreen() * _a.getIntensity(),
 						_blue * _a.getBlue() * _a.getIntensity() };
 
-	ALight *l = sc.getLights()[0];
+	std::shared_ptr<ALight> l = sc.getLights()[0];
 	Vec3 light_dir = (l->getPos() - hit.point).normalize();
 	float light_distance = (l->getPos() - hit.point).length();
 	Vec3 shadow_orig(hit.point + hit.normal * 1e-4);

@@ -10,12 +10,12 @@ class	AHittable;
 
 struct	BVHNode
 {
-	AABB						volume;
-	std::shared_ptr<BVHNode>	left;
-	std::shared_ptr<BVHNode>	right;
-	std::vector<AHittable*>		objects;
+	AABB										volume;
+	std::shared_ptr<BVHNode>					left;
+	std::shared_ptr<BVHNode>					right;
+	std::vector<std::shared_ptr<AHittable>>		objects;
 
-	BVHNode(std::vector<AHittable*> &objects);
+	BVHNode(std::vector<std::shared_ptr<AHittable>> &objects);
 
 	bool	operator<(const BVHNode &other);
 

@@ -1,8 +1,8 @@
 #include "../inc/BVHNode.hpp"
 
-BVHNode::BVHNode(std::vector<AHittable*> &objects)
+BVHNode::BVHNode(std::vector<std::shared_ptr<AHittable>> &objects)
 {
-	for (AHittable* ptr : objects)
+	for (std::shared_ptr<AHittable> ptr : objects)
 	{
 		volume.extend(ptr->boundingBox());
 	}
@@ -13,8 +13,8 @@ BVHNode::BVHNode(std::vector<AHittable*> &objects)
 	}
 	else
 	{
-		std::vector<AHittable*> left_objs;
-		std::vector<AHittable*> right_objs;
+		std::vector<std::shared_ptr<AHittable>> left_objs;
+		std::vector<std::shared_ptr<AHittable>> right_objs;
 		std::sort(objects.begin(), objects.end());
 
 		size_t cutoff = objects.size() / 2;

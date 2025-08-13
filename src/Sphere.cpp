@@ -35,7 +35,7 @@ HitRecord	Sphere::detectHit(const Ray &ray)
 	float	c = dot(oc, oc) - _radius * _radius;
 	float	discriminant = b * b - a * c;
 	if (discriminant < 0)
-		return (HitRecord(NAN));
+		return (HitRecord(std::numeric_limits<float>::max()));
 
 	float t1 = (b - sqrtf(discriminant)) / a;
 	float t2 = (b + sqrtf(discriminant)) / a;
@@ -50,7 +50,7 @@ HitRecord	Sphere::detectHit(const Ray &ray)
 		return (HitRecord(t2, ((hit_point - _pos).normalize()) * -1, hit_point, _mat));
 	}
 	else
-		return (HitRecord(NAN));
+		return (HitRecord(std::numeric_limits<float>::max()));
 }
 
 float	Sphere::getRadius(void) const

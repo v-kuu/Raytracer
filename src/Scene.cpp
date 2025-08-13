@@ -3,26 +3,16 @@
 #include "../inc/BlinnPhongMaterial.hpp"
 #include "../inc/Sphere.hpp"
 
-//static HitRecord find_closest(std::vector<AHittable*> &objects, Ray &ray, int &i);
 static Uint32	skybox(Ray ray);
 
-Scene::Scene(void) : _cam(new Camera(90, Vec3(0, 0, 0), Vec3(0, 0, -1)))
+Scene::Scene(void) : _cam(std::make_shared<Camera>(90, Vec3(0, 0, 0), Vec3(0, 0, -1)))
 {
 	std::shared_ptr<IMaterial> mat = std::make_shared<BlinnPhongMaterial>(1.0f, 0.5f, 0.5f);
 	std::shared_ptr<IMaterial> mat2 = std::make_shared<BlinnPhongMaterial>(0.5f, 0.5f, 1.0f);
-	_objects.push_back(new Sphere(2, Vec3(2, 0, -10), mat));
-	_objects.push_back(new Sphere(2, Vec3(-3, 0, -5), mat2));
-	_lights.push_back(new PointLight(1.0f, 1.0f, 1.0f, 1.0f, Vec3(-5, 10, -5)));
+	_objects.push_back(std::make_shared<Sphere>(2, Vec3(2, 0, -10), mat));
+	_objects.push_back(std::make_shared<Sphere>(2, Vec3(-3, 0, -5), mat2));
+	_lights.push_back(std::make_shared<PointLight>(1.0f, 1.0f, 1.0f, 1.0f, Vec3(-5, 10, -5)));
 	_bvh = std::make_shared<BVHNode>(_objects);
-}
-
-Scene::~Scene(void)
-{
-	delete _cam;
-	for (AHittable* ptr : _objects)
-		delete ptr;
-	for (ALight* ptr : _lights)
-		delete ptr;
 }
 
 Scene::Scene(const Scene &other)
@@ -61,8 +51,6 @@ void	Scene::render(Texture *target)
 		for (int x = 0; x < w; ++x)
 		{
 			Ray	ray = _cam->pixelRay(x, y);
-			//int	obj_index = 0;
-			//HitRecord hit = find_closest(_objects, ray, obj_index);
 			HitRecord hit = _bvh->intersect(ray);
 			if (hit.t >= 0 && hit.t < std::numeric_limits<float>::max())
 				pixel_color = hit.mat->shade(ray, hit, *this);
@@ -76,22 +64,6 @@ void	Scene::render(Texture *target)
 	SDL_RenderTexture(renderer->getRenderer(), target->getTexture(), NULL, NULL);
 	SDL_RenderPresent(renderer->getRenderer());
 }
-
-/*static HitRecord	find_closest(std::vector<AHittable*> &objects, Ray &ray, int &i)
-{
-	HitRecord closest = HitRecord(std::numeric_limits<float>::max(), Vec3(0, 0 ,0), Vec3(0, 0, 0));
-	for (unsigned long j = 0; j < objects.size(); ++j)
-	{
-		HitRecord hit = objects[j]->detectHit(ray);
-		if (hit.t < closest.t && hit.t >= 0)
-		{
-			closest = hit;
-			i = static_cast<int>(j);
-		}
-	}
-	return (closest);
-}*/
-
 static Uint32	skybox(Ray ray)
 {
 	Vec3 unit_dir = ray.dir.normalize();
@@ -102,17 +74,17 @@ static Uint32	skybox(Ray ray)
 	return (red << 24 | green << 16 | blue << 8 | 0xFF);
 }
 
-Camera*	Scene::getCam(void) const
+std::shared_ptr<Camera>	Scene::getCam(void) const
 {
 	return (_cam);
 }
 
-const std::vector<AHittable*>& Scene::getObjects(void) const
+const std::vector<std::shared_ptr<AHittable>>& Scene::getObjects(void) const
 {
 	return (_objects);
 }
 
-const std::vector<ALight*>& Scene::getLights(void) const
+const std::vector<std::shared_ptr<ALight>>& Scene::getLights(void) const
 {
 	return (_lights);
 }
