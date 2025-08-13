@@ -41,7 +41,7 @@ HitRecord	BVHNode::intersect(const Ray &ray) const
 		if (right->volume.intersect(ray))
 			return (right->intersect(ray));
 	}
-	return (HitRecord(NAN, Vec3(0, 0, 0), Vec3(0, 0, 0)));
+	return (HitRecord(NAN));
 }
 
 bool	BVHNode::isLeaf(void) const

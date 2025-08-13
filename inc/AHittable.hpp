@@ -11,23 +11,24 @@ enum	e_hit_type
 };
 
 class	IMaterial;
+struct	HitRecord;
 
 class	AHittable
 {
 	public:
 		AHittable(void) = delete;
-		AHittable(int type, Vec3 pos, IMaterial *mat);
+		AHittable(int type, Vec3 pos, std::shared_ptr<IMaterial> mat);
 		virtual ~AHittable(void) = default;
 
 		virtual HitRecord	detectHit(const Ray &ray) = 0;
 		virtual AABB		boundingBox(void) const = 0;
 
-		Vec3		getPos(void) const;
-		int			getType(void) const;
-		IMaterial	*getMat(void) const;
+		Vec3						getPos(void) const;
+		int							getType(void) const;
+		std::shared_ptr<IMaterial>	getMat(void) const;
 
 	protected:
-		Vec3		_pos;
-		int			_type;
-		IMaterial	*_mat;
+		Vec3						_pos;
+		int							_type;
+		std::shared_ptr<IMaterial>	_mat;
 };

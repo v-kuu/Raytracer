@@ -1,13 +1,8 @@
 #include "../inc/Sphere.hpp"
 
-Sphere::Sphere(float radius, Vec3 center, IMaterial *mat)
+Sphere::Sphere(float radius, Vec3 center, std::shared_ptr<IMaterial> mat)
 	: AHittable(SPHERE, center, mat), _radius(radius)
 {
-}
-
-Sphere::~Sphere(void)
-{
-	delete _mat;
 }
 
 Sphere::Sphere(const Sphere &other)
@@ -40,22 +35,22 @@ HitRecord	Sphere::detectHit(const Ray &ray)
 	float	c = dot(oc, oc) - _radius * _radius;
 	float	discriminant = b * b - a * c;
 	if (discriminant < 0)
-		return (HitRecord(NAN, Vec3(0, 0, 0), Vec3(0, 0, 0)));
+		return (HitRecord(NAN));
 
 	float t1 = (b - sqrtf(discriminant)) / a;
 	float t2 = (b + sqrtf(discriminant)) / a;
 	if (t1 >= 0)
 	{
 		Vec3 hit_point = rayAt(ray, t1);
-		return (HitRecord(t1, (hit_point - _pos).normalize(), hit_point));
+		return (HitRecord(t1, (hit_point - _pos).normalize(), hit_point, _mat));
 	}
 	else if (t2 >= 0)
 	{
 		Vec3 hit_point = rayAt(ray, t2);
-		return (HitRecord(t2, ((hit_point - _pos).normalize()) * -1, hit_point));
+		return (HitRecord(t2, ((hit_point - _pos).normalize()) * -1, hit_point, _mat));
 	}
 	else
-		return (HitRecord(NAN, Vec3(0, 0, 0), Vec3(0, 0, 0)));
+		return (HitRecord(NAN));
 }
 
 float	Sphere::getRadius(void) const
