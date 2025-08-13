@@ -4,11 +4,6 @@ AHittable::AHittable(int type, Vec3 pos, IMaterial *mat) : _pos(pos), _type(type
 {
 }
 
-const AABB&	AHittable::getBoundingBox(void) const
-{
-	return (_bounding_box);
-}
-
 Vec3	AHittable::getPos(void) const
 {
 	return (_pos);

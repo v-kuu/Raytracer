@@ -44,9 +44,9 @@ void	Application::run(void)
 {
 	Scene	scene = Scene();
 	Quaternion right(5, Vec3(0, -1, 0));
-	Quaternion left = right.inverse();
+	Quaternion left(5, Vec3(0, 1, 0));
 	Quaternion up(5, Vec3(1, 0, 0));
-	Quaternion down = up.inverse();
+	Quaternion down(5, Vec3(-1, 0, 0));
 	while (true)
 	{
 		SDL_Event event;

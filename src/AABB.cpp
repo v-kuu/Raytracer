@@ -1,18 +1,48 @@
 #include "../inc/AABB.hpp"
 
-AABB::AABB(Vec3 min, Vec3 max) : min(min), max(max)
+AABB::AABB(void)
+	: min(std::numeric_limits<float>::max(),
+			std::numeric_limits<float>::max(),
+			std::numeric_limits<float>::max()),
+	max(std::numeric_limits<float>::min(),
+			std::numeric_limits<float>::min(),
+			std::numeric_limits<float>::min())
 {
 }
 
-AABB::AABB(const AABB &box1, const AABB &box2)
+bool	AABB::operator<(const AABB &other) const
 {
-	min.x = std::min(box1.min.x, box2.min.x);
-	min.y = std::min(box1.min.y, box2.min.y);
-	min.z = std::min(box1.min.z, box2.min.z);
+	return (center().x < other.center().x);
+}
 
-	max.x = std::max(box1.max.x, box2.max.x);
-	max.y = std::max(box1.max.y, box2.max.y);
-	max.z = std::max(box1.max.z, box2.max.z);
+void	AABB::extend(const AABB &other)
+{
+	min.x = std::min(min.x, other.min.x);
+	min.y = std::min(min.y, other.min.y);
+	min.z = std::min(min.z, other.min.z);
+
+	max.x = std::max(max.x, other.max.x);
+	max.y = std::max(max.y, other.max.y);
+	max.z = std::max(max.z, other.max.z);
+}
+
+void	AABB::extend(const Vec3 &point)
+{
+	min.x = std::min(min.x, point.x);
+	min.y = std::min(min.y, point.y);
+	min.z = std::min(min.z, point.z);
+
+	max.x = std::max(max.x, point.x);
+	max.y = std::max(max.y, point.y);
+	max.z = std::max(max.z, point.z);
+}
+
+Vec3	AABB::center(void) const
+{
+	Vec3 ret((min.x + max.x) / 2,
+			(min.y + max.y) / 2,
+			(min.z + max.z) / 2);
+	return (ret);
 }
 
 //Andrew Woo's 1990 algorithm optimized by Pierre Terdiman in 2000

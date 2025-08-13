@@ -7,9 +7,12 @@ struct	AABB
 	Vec3	min;
 	Vec3	max;
 
-	AABB(void) = default;
-	AABB(Vec3 min, Vec3 max);
-	AABB(const AABB &box1, const AABB &box2);
+	AABB(void);
 
+	bool	operator<(const AABB &other) const;
+
+	void	extend(const AABB &other);
+	void	extend(const Vec3 &point);
+	Vec3	center(void) const;
 	bool	intersect(const Ray &ray) const;
 };

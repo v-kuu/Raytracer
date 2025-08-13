@@ -10,7 +10,8 @@ class	Sphere : public AHittable
 		Sphere(const Sphere &other);
 		Sphere	&operator=(const Sphere &other);
 
-		HitRecord	detectHit(Ray &ray) override;
+		HitRecord	detectHit(const Ray &ray) override;
+		AABB		boundingBox(void) const override;
 
 		float	getRadius(void) const;
 

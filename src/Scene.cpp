@@ -3,7 +3,7 @@
 #include "../inc/BlinnPhongMaterial.hpp"
 #include "../inc/Sphere.hpp"
 
-static HitRecord find_closest(std::vector<AHittable*> &objects, Ray &ray, int &i);
+//static HitRecord find_closest(std::vector<AHittable*> &objects, Ray &ray, int &i);
 static Uint32	skybox(Ray ray);
 
 Scene::Scene(void) : _cam(new Camera(90, Vec3(0, 0, 0), Vec3(0, 0, -1)))
@@ -13,6 +13,7 @@ Scene::Scene(void) : _cam(new Camera(90, Vec3(0, 0, 0), Vec3(0, 0, -1)))
 	_objects.push_back(new Sphere(2, Vec3(0, 0, -10), mat));
 	_objects.push_back(new Sphere(2, Vec3(-1, 5, -5), mat2));
 	_lights.push_back(new PointLight(1.0f, 1.0f, 1.0f, 1.0f, Vec3(-5, 10, -5)));
+	_bvh = std::make_shared<BVHNode>(_objects);
 }
 
 Scene::~Scene(void)
@@ -60,10 +61,11 @@ void	Scene::render(Texture *target)
 		for (int x = 0; x < w; ++x)
 		{
 			Ray	ray = _cam->pixelRay(x, y);
-			int	obj_index = 0;
-			HitRecord hit = find_closest(_objects, ray, obj_index);
+			//int	obj_index = 0;
+			//HitRecord hit = find_closest(_objects, ray, obj_index);
+			HitRecord hit = _bvh->intersect(ray);
 			if (hit.t >= 0 && hit.t < std::numeric_limits<float>::max())
-				pixel_color = _objects[obj_index]->getMat()->shade(ray, hit, *this);
+				pixel_color = _objects[0]->getMat()->shade(ray, hit, *this);
 			else
 				pixel_color = skybox(ray);
 			pixel_buffer[y * (pitch / sizeof(Uint32)) + x] = pixel_color;
@@ -75,7 +77,7 @@ void	Scene::render(Texture *target)
 	SDL_RenderPresent(renderer->getRenderer());
 }
 
-static HitRecord	find_closest(std::vector<AHittable*> &objects, Ray &ray, int &i)
+/*static HitRecord	find_closest(std::vector<AHittable*> &objects, Ray &ray, int &i)
 {
 	HitRecord closest = HitRecord(std::numeric_limits<float>::max(), Vec3(0, 0 ,0), Vec3(0, 0, 0));
 	for (unsigned long j = 0; j < objects.size(); ++j)
@@ -88,7 +90,7 @@ static HitRecord	find_closest(std::vector<AHittable*> &objects, Ray &ray, int &i
 		}
 	}
 	return (closest);
-}
+}*/
 
 static Uint32	skybox(Ray ray)
 {

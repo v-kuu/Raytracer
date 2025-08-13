@@ -1,8 +1,12 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <algorithm>
 #include "AHittable.hpp"
+#include "HitRecord.hpp"
 #include "AABB.hpp"
+
+class	AHittable;
 
 struct	BVHNode
 {
@@ -11,5 +15,10 @@ struct	BVHNode
 	std::shared_ptr<BVHNode>	right;
 	std::vector<AHittable*>		objects;
 
-	bool	isLeaf(void);
+	BVHNode(std::vector<AHittable*> &objects);
+
+	bool	operator<(const BVHNode &other);
+
+	HitRecord	intersect(const Ray &ray) const;
+	bool		isLeaf(void) const;
 };

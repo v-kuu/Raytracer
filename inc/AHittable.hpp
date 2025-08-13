@@ -19,15 +19,14 @@ class	AHittable
 		AHittable(int type, Vec3 pos, IMaterial *mat);
 		virtual ~AHittable(void) = default;
 
-		virtual HitRecord	detectHit(Ray &ray) = 0;
+		virtual HitRecord	detectHit(const Ray &ray) = 0;
+		virtual AABB		boundingBox(void) const = 0;
 
-		const AABB	&getBoundingBox(void) const;
 		Vec3		getPos(void) const;
 		int			getType(void) const;
 		IMaterial	*getMat(void) const;
 
 	protected:
-		AABB		_bounding_box;
 		Vec3		_pos;
 		int			_type;
 		IMaterial	*_mat;
