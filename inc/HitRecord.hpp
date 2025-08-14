@@ -1,6 +1,6 @@
 #pragma once
+#include <memory>
 #include "Vec3.hpp"
-#include "IMaterial.hpp"
 
 class	IMaterial;
 

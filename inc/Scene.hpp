@@ -10,6 +10,12 @@
 #include "HitRecord.hpp"
 #include "BVHNode.hpp"
 #include "ThreadPool.hpp"
+#include "IMaterial.hpp"
+#include "SkyboxMaterial.hpp"
+#include "BlinnPhongMaterial.hpp"
+#include "NormalMaterial.hpp"
+#include "Sphere.hpp"
+#include "PointLight.hpp"
 
 class	AHittable;
 class	ALight;

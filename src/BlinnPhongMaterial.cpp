@@ -23,7 +23,7 @@ BlinnPhongMaterial&	BlinnPhongMaterial::operator=(const BlinnPhongMaterial &othe
 	return (*this);
 }
 
-Uint32	BlinnPhongMaterial::shade(const Ray &ray, const HitRecord &hit, const Scene &sc)
+Uint32	BlinnPhongMaterial::shade(const Ray &ray, const HitRecord &hit, const Scene &sc) const
 {
 	float ambient[3] = { _red * _a.getRed() * _a.getIntensity(),
 						_green * _a.getGreen() * _a.getIntensity(),

@@ -22,7 +22,8 @@ SOURCES			= src/main.cpp src/Window.cpp src/Renderer.cpp src/Texture.cpp \
 				  src/Application.cpp src/AHittable.cpp src/Ray.cpp src/Sphere.cpp \
 				  src/Vec3.cpp src/Camera.cpp src/ALight.cpp src/BlinnPhongMaterial.cpp \
 				  src/PointLight.cpp src/AmbientLight.cpp src/Scene.cpp src/HitRecord.cpp \
-				  src/Quaternion.cpp src/AABB.cpp src/BVHNode.cpp src/ThreadPool.cpp
+				  src/Quaternion.cpp src/AABB.cpp src/BVHNode.cpp src/ThreadPool.cpp \
+				  src/SkyboxMaterial.cpp src/NormalMaterial.cpp
 
 OBJDIR			= obj
 
@@ -31,7 +32,7 @@ HEADERS			= inc/Window.hpp inc/Renderer.hpp inc/Texture.hpp inc/Application.hpp 
 				  inc/ALight.hpp inc/PointLight.hpp inc/IMaterial.hpp \
 				  inc/BlinnPhongMaterial.hpp inc/AmbientLight.hpp inc/Scene.hpp \
 				  inc/HitRecord.hpp inc/Quaternion.hpp inc/AABB.hpp inc/BVHNode.hpp \
-				  inc/ThreadPool.hpp
+				  inc/ThreadPool.hpp inc/SkyboxMaterial.hpp inc/NormalMaterial.hpp
 
 OBJECTS			= $(SOURCES:%.cpp=$(OBJDIR)/%.o)
 

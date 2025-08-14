@@ -14,7 +14,7 @@ class	BlinnPhongMaterial : public IMaterial
 		BlinnPhongMaterial(const BlinnPhongMaterial &other);
 		BlinnPhongMaterial	&operator=(const BlinnPhongMaterial &other);
 
-		Uint32	shade(const Ray &ray, const HitRecord &hit, const Scene &sc) override;
+		Uint32	shade(const Ray &ray, const HitRecord &hit, const Scene &sc) const override;
 
 	private:
 		static float		_shininess;
