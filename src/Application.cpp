@@ -67,7 +67,6 @@ void	Application::run(void)
 						break ;
 					case (SDLK_UP):
 						scene.getCam()->rotate(up);
-
 						break ;
 					case (SDLK_DOWN):
 						scene.getCam()->rotate(down);

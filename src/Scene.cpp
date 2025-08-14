@@ -1,6 +1,6 @@
 #include "../inc/Scene.hpp"
 
-Scene::Scene(void) : _cam(std::make_shared<Camera>(110, Vec3(0, 0, 0), Vec3(0, 0, -1)))
+Scene::Scene(void) : _cam(std::make_shared<Camera>(90, Vec3(0, 0, 5), Vec3(0, 0, -1)))
 {
 	std::shared_ptr<IMaterial> mat = std::make_shared<BlinnPhongMaterial>(1.0f, 0.5f, 0.5f);
 	std::shared_ptr<IMaterial> mat2 = std::make_shared<BlinnPhongMaterial>(0.5f, 0.5f, 1.0f);
