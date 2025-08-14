@@ -3,6 +3,7 @@
 #include "Renderer.hpp"
 #include "Texture.hpp"
 #include "Scene.hpp"
+#include "ThreadPool.hpp"
 
 class	Application
 {

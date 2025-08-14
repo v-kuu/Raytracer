@@ -9,6 +9,7 @@
 #include "AHittable.hpp"
 #include "HitRecord.hpp"
 #include "BVHNode.hpp"
+#include "ThreadPool.hpp"
 
 class	AHittable;
 class	ALight;
@@ -23,7 +24,7 @@ class	Scene
 		Scene(const Scene &other) = delete;
 		Scene	&operator=(const Scene &other) = delete;
 
-		void	render(std::shared_ptr<Texture> target);
+		void	render(std::shared_ptr<Texture> target, ThreadPool &pool);
 
 		std::shared_ptr<Camera>	getCam(void) const;
 		const std::vector<std::unique_ptr<AHittable>>	&getObjects(void) const;

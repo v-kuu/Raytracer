@@ -3,7 +3,7 @@
 #include "../inc/BlinnPhongMaterial.hpp"
 #include "../inc/Sphere.hpp"
 
-static Uint32	skybox(Ray ray);
+static Uint32	skybox(const Ray &ray);
 
 Scene::Scene(void) : _cam(std::make_shared<Camera>(110, Vec3(0, 0, 0), Vec3(0, 0, -1)))
 {
@@ -15,41 +15,50 @@ Scene::Scene(void) : _cam(std::make_shared<Camera>(110, Vec3(0, 0, 0), Vec3(0, 0
 	_bvh = std::make_unique<BVHNode>(_objects);
 }
 
-void	Scene::render(std::shared_ptr<Texture> target)
+void	Scene::render(std::shared_ptr<Texture> target, ThreadPool &pool)
 {
 	std::shared_ptr<Renderer> renderer = target->getRenderer();
 	void	*pixels;
 	Uint32	*pixel_buffer;
-	int		pitch;
-	Uint32	pixel_color;
-	int		w, h;
+	int		pitch, w, h;
 
 	if (!SDL_GetWindowSizeInPixels(Window::getInstance()->getWindow(), &w, &h))
-	{
 		throw (std::runtime_error("Failed to get texture size"));
-	}
 	if (!SDL_LockTexture(target->getTexture(), NULL, &pixels, &pitch))
 		throw (std::runtime_error("Could not lock SDL texture"));
 	pixel_buffer = static_cast<Uint32*>(pixels);
-	for (int y = 0; y < h; ++y)
+	int thread_count = pool.getSize();
+	int rows_per_thread = h / thread_count;
+	for (int t = 0; t < thread_count; ++t)
 	{
-		for (int x = 0; x < w; ++x)
+		int start = t * rows_per_thread;
+		int end = (t == thread_count - 1) ? h : (t + 1) * rows_per_thread;
+		pool.enqueue([this, start, end, w, pixel_buffer, pitch]()
 		{
-			Ray	ray = _cam->pixelRay(x, y);
-			HitRecord hit = _bvh->intersect(ray);
-			if (hit.t >= 0 && hit.t < std::numeric_limits<float>::max())
-				pixel_color = hit.mat->shade(ray, hit, *this);
-			else
-				pixel_color = skybox(ray);
-			pixel_buffer[y * (pitch / sizeof(Uint32)) + x] = pixel_color;
-		}
+			Uint32 pixel_color;
+			for (int y = start; y < end; ++y)
+			{
+				for (int x = 0; x < w; ++x)
+				{
+					Ray	ray = _cam->pixelRay(x, y);
+					HitRecord hit = _bvh->intersect(ray);
+					if (hit.t >= 0 && hit.t < std::numeric_limits<float>::max())
+						pixel_color = hit.mat->shade(ray, hit, *this);
+					else
+						pixel_color = skybox(ray);
+					pixel_buffer[y * (pitch / sizeof(Uint32)) + x] = pixel_color;
+				}
+			}
+		});
 	}
+	pool.wait();
 	SDL_UnlockTexture(target->getTexture());
 	SDL_RenderClear(renderer->getRenderer());
 	SDL_RenderTexture(renderer->getRenderer(), target->getTexture(), NULL, NULL);
 	SDL_RenderPresent(renderer->getRenderer());
 }
-static Uint32	skybox(Ray ray)
+
+static Uint32	skybox(const Ray &ray)
 {
 	Vec3 unit_dir = ray.dir.normalize();
 	float fraction = 0.5 * (-unit_dir.y + 1.0f);

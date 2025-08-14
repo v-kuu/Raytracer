@@ -42,6 +42,7 @@ Application::~Application(void)
 void	Application::run(void)
 {
 	Scene	scene = Scene();
+	ThreadPool	pool = ThreadPool(6);
 	Quaternion right(5, Vec3(0, -1, 0));
 	Quaternion left(5, Vec3(0, 1, 0));
 	Quaternion up(5, Vec3(1, 0, 0));
@@ -77,7 +78,7 @@ void	Application::run(void)
 		}
 		if (to_render)
 		{
-			scene.render(_canvas);
+			scene.render(_canvas, pool);
 			to_render = false;
 		}
 		SDL_Delay(16);
