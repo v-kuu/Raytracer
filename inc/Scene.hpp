@@ -20,18 +20,19 @@ class	Scene
 	public:
 		Scene(void);
 		~Scene(void) = default;
-		Scene(const Scene &other);
-		Scene	&operator=(const Scene &other);
+		Scene(const Scene &other) = delete;
+		Scene	&operator=(const Scene &other) = delete;
 
 		void	render(std::shared_ptr<Texture> target);
 
 		std::shared_ptr<Camera>	getCam(void) const;
-		const std::vector<std::shared_ptr<AHittable>>	&getObjects(void) const;
+		const std::vector<std::unique_ptr<AHittable>>	&getObjects(void) const;
 		const std::vector<std::shared_ptr<ALight>>		&getLights(void) const;
+		const std::unique_ptr<BVHNode>					&getBVH(void) const;
 
 	private:
 		std::shared_ptr<Camera>						_cam;
-		std::vector<std::shared_ptr<AHittable>>		_objects;
+		std::vector<std::unique_ptr<AHittable>>		_objects;
 		std::vector<std::shared_ptr<ALight>>		_lights;
-		std::shared_ptr<BVHNode>					_bvh;
+		std::unique_ptr<BVHNode>					_bvh;
 };

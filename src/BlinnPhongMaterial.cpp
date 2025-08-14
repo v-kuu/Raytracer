@@ -35,19 +35,16 @@ Uint32	BlinnPhongMaterial::shade(const Ray &ray, const HitRecord &hit, const Sce
 	Vec3 shadow_orig(hit.point + hit.normal * 1e-4);
 	Ray shadow_ray(shadow_orig, light_dir);
 
-	for (const auto &object : sc.getObjects())
+	HitRecord shadow = sc.getBVH()->intersect(shadow_ray);
+	if (shadow.t >= 0 && shadow.t < light_distance)
 	{
-		HitRecord hit = object->detectHit(shadow_ray);
-		if (hit.t >= 0 && hit.t < light_distance)
-		{
-			Uint8 red = static_cast<Uint8>(255 *
-					std::clamp(ambient[0], 0.0f, 1.0f));
-			Uint8 green = static_cast<Uint8>(255 *
-					std::clamp(ambient[1], 0.0f, 1.0f));
-			Uint8 blue = static_cast<Uint8>(255 *
-					std::clamp(ambient[2], 0.0f, 1.0f));
-			return (red << 24 | green << 16 | blue << 8 | 0xFF);
-		}
+		Uint8 red = static_cast<Uint8>(255 *
+				std::clamp(ambient[0], 0.0f, 1.0f));
+		Uint8 green = static_cast<Uint8>(255 *
+				std::clamp(ambient[1], 0.0f, 1.0f));
+		Uint8 blue = static_cast<Uint8>(255 *
+				std::clamp(ambient[2], 0.0f, 1.0f));
+		return (red << 24 | green << 16 | blue << 8 | 0xFF);
 	}
 
 	float diff = fmax(dot(hit.normal, light_dir), 0.0f);

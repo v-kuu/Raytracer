@@ -1,27 +1,31 @@
 #include "../inc/BVHNode.hpp"
 
-BVHNode::BVHNode(std::vector<std::shared_ptr<AHittable>> &objects)
+BVHNode::BVHNode(std::vector<std::unique_ptr<AHittable>> &objects)
 {
-	for (std::shared_ptr<AHittable> ptr : objects)
+	for (std::unique_ptr<AHittable> &ptr : objects)
 	{
 		volume.extend(ptr->boundingBox());
 	}
 
 	if (objects.size() == 1)
 	{
-		this->objects = objects;
+		this->objects = std::move(objects);
 	}
 	else
 	{
-		std::vector<std::shared_ptr<AHittable>> left_objs;
-		std::vector<std::shared_ptr<AHittable>> right_objs;
+		std::vector<std::unique_ptr<AHittable>> left_objs;
+		std::vector<std::unique_ptr<AHittable>> right_objs;
 		std::sort(objects.begin(), objects.end());
 
 		size_t cutoff = objects.size() / 2;
-		left_objs.assign(objects.begin(), objects.begin() + cutoff);
-		right_objs.assign(objects.begin() + cutoff, objects.end());
-		left = std::make_shared<BVHNode>(left_objs);
-		right = std::make_shared<BVHNode>(right_objs);
+		left_objs.assign(
+				std::make_move_iterator(objects.begin()),
+				std::make_move_iterator(objects.begin() + cutoff));
+		right_objs.assign(
+				std::make_move_iterator(objects.begin() + cutoff),
+				std::make_move_iterator(objects.end()));
+		left = std::make_unique<BVHNode>(left_objs);
+		right = std::make_unique<BVHNode>(right_objs);
 	}
 }
 

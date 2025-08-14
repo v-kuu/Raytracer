@@ -5,29 +5,14 @@
 
 static Uint32	skybox(Ray ray);
 
-Scene::Scene(void) : _cam(std::make_shared<Camera>(90, Vec3(0, 0, 0), Vec3(0, 0, -1)))
+Scene::Scene(void) : _cam(std::make_shared<Camera>(110, Vec3(0, 0, 0), Vec3(0, 0, -1)))
 {
 	std::shared_ptr<IMaterial> mat = std::make_shared<BlinnPhongMaterial>(1.0f, 0.5f, 0.5f);
 	std::shared_ptr<IMaterial> mat2 = std::make_shared<BlinnPhongMaterial>(0.5f, 0.5f, 1.0f);
-	_objects.push_back(std::make_shared<Sphere>(2, Vec3(2, 0, -10), mat));
-	_objects.push_back(std::make_shared<Sphere>(2, Vec3(-3, 0, -5), mat2));
+	_objects.push_back(std::make_unique<Sphere>(2, Vec3(2, 0, -10), mat));
+	_objects.push_back(std::make_unique<Sphere>(2, Vec3(-3, 0, -5), mat2));
 	_lights.push_back(std::make_shared<PointLight>(1.0f, 1.0f, 1.0f, 1.0f, Vec3(-5, 10, -5)));
-	_bvh = std::make_shared<BVHNode>(_objects);
-}
-
-Scene::Scene(const Scene &other)
-	: _cam(other._cam), _objects(other._objects), _lights(other._lights)
-{
-}
-
-Scene&	Scene::operator=(const Scene &other)
-{
-	if (this == &other)
-		return (*this);
-	_cam = other._cam;
-	_objects = other._objects;
-	_lights = other._lights;
-	return (*this);
+	_bvh = std::make_unique<BVHNode>(_objects);
 }
 
 void	Scene::render(std::shared_ptr<Texture> target)
@@ -79,7 +64,7 @@ std::shared_ptr<Camera>	Scene::getCam(void) const
 	return (_cam);
 }
 
-const std::vector<std::shared_ptr<AHittable>>& Scene::getObjects(void) const
+const std::vector<std::unique_ptr<AHittable>>& Scene::getObjects(void) const
 {
 	return (_objects);
 }
@@ -87,4 +72,9 @@ const std::vector<std::shared_ptr<AHittable>>& Scene::getObjects(void) const
 const std::vector<std::shared_ptr<ALight>>& Scene::getLights(void) const
 {
 	return (_lights);
+}
+
+const std::unique_ptr<BVHNode>&	Scene::getBVH(void) const
+{
+	return (_bvh);
 }
