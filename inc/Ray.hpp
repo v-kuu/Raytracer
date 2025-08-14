@@ -7,9 +7,9 @@ struct	Ray
 	Vec3	orig;
 	Vec3	dir;
 
-	Ray(Vec3 origin, Vec3 direction);
+	Ray(const Vec3 &origin, const Vec3 &direction);
 };
 
 std::ostream	&operator<<(std::ostream &os, const Ray &ray);
 
-Vec3	rayAt(Ray ray, float t);
+Vec3	rayAt(const Ray &ray, float t);

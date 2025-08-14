@@ -1,6 +1,6 @@
 #include "../inc/AHittable.hpp"
 
-AHittable::AHittable(int type, Vec3 pos, std::shared_ptr<IMaterial> mat) : _pos(pos), _type(type), _mat(mat)
+AHittable::AHittable(int type, const Vec3 &pos, std::shared_ptr<IMaterial> mat) : _pos(pos), _type(type), _mat(mat)
 {
 }
 

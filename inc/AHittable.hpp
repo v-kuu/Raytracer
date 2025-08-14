@@ -17,7 +17,7 @@ class	AHittable
 {
 	public:
 		AHittable(void) = delete;
-		AHittable(int type, Vec3 pos, std::shared_ptr<IMaterial> mat);
+		AHittable(int type, const Vec3 &pos, std::shared_ptr<IMaterial> mat);
 		virtual ~AHittable(void) = default;
 
 		virtual HitRecord	detectHit(const Ray &ray) = 0;

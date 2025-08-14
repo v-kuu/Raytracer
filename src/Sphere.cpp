@@ -1,6 +1,6 @@
 #include "../inc/Sphere.hpp"
 
-Sphere::Sphere(float radius, Vec3 center, std::shared_ptr<IMaterial> mat)
+Sphere::Sphere(float radius, const Vec3 &center, std::shared_ptr<IMaterial> mat)
 	: AHittable(SPHERE, center, mat), _radius(radius)
 {
 }

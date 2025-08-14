@@ -9,7 +9,7 @@ class	Camera
 {
 	public:
 		Camera(void) = delete;
-		Camera(float fov_degrees, Vec3 origin, Vec3 direction);
+		Camera(float fov_degrees, const Vec3 &origin, const Vec3 &direction);
 		~Camera(void) = default;
 		Camera(const Camera &other);
 		Camera	&operator=(const Camera &other);
@@ -17,7 +17,7 @@ class	Camera
 		Quaternion	getOrientation(void) const;
 
 		Ray		pixelRay(int x, int y) const;
-		void	rotate(Quaternion quat);
+		void	rotate(const Quaternion &quat);
 
 	private:
 		float		_fov_rad;

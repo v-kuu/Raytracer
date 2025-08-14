@@ -4,7 +4,7 @@ Vec3::Vec3(void) : x(0), y(0), z(0)
 {
 }
 
-Vec3::Vec3(float xi, float yi, float zi) : x(xi), y(yi), z(zi)
+Vec3::Vec3(float x, float y, float z) : x(x), y(y), z(z)
 {
 }
 

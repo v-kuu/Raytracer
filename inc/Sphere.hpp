@@ -5,7 +5,7 @@ class	Sphere : public AHittable
 {
 	public:
 		Sphere(void) = delete;
-		Sphere(float radius, Vec3 center, std::shared_ptr<IMaterial> mat);
+		Sphere(float radius, const Vec3 &center, std::shared_ptr<IMaterial> mat);
 		~Sphere(void) = default;
 		Sphere(const Sphere &other);
 		Sphere	&operator=(const Sphere &other);

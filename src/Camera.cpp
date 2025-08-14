@@ -1,6 +1,6 @@
 #include "../inc/Camera.hpp"
 
-Camera::Camera(float fov_degrees, Vec3 origin, Vec3 direction)
+Camera::Camera(float fov_degrees, const Vec3 &origin, const Vec3 &direction)
 {
 	_fov_rad = fov_degrees * (M_PI / 180);
 	_orig = origin;
@@ -49,7 +49,7 @@ Ray	Camera::pixelRay(int x, int y) const
 	return (Ray(_orig, pixel_center - _orig));
 }
 
-void	Camera::rotate(Quaternion quat)
+void	Camera::rotate(const Quaternion &quat)
 {
 	int width, height;
 	if (!SDL_GetWindowSizeInPixels

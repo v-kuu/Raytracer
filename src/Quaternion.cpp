@@ -9,7 +9,7 @@ Quaternion::Quaternion(float w, float x, float y, float z)
 {
 }
 
-Quaternion::Quaternion(float angle_deg, Vec3 axis)
+Quaternion::Quaternion(float angle_deg, const Vec3 &axis)
 {
 	float angle_rad = angle_deg * (M_PI / 180);
 	w = cos(angle_rad / 2);
@@ -18,7 +18,7 @@ Quaternion::Quaternion(float angle_deg, Vec3 axis)
 	z = axis.z * sin(angle_rad / 2);
 }
 
-Quaternion::Quaternion(Vec3 from, Vec3 to)
+Quaternion::Quaternion(const Vec3 &from, const Vec3 &to)
 {
 	float dot_p = dot(from, to);
 	if (dot_p < 1.0f)
@@ -80,7 +80,7 @@ Quaternion	Quaternion::inverse(void) const
 	return (Quaternion(w, -x , -y, -z));
 }
 
-std::ostream	&operator<<(std::ostream &os, const Quaternion quat)
+std::ostream	&operator<<(std::ostream &os, const Quaternion &quat)
 {
 	os << "{" << quat.w << ", " << quat.x << ", " << quat.y << ", " << quat.z
 		<< "}";

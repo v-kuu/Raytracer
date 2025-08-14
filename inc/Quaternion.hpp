@@ -11,8 +11,8 @@ struct	Quaternion
 
 	Quaternion(void);
 	Quaternion(float w, float x, float y, float z);
-	Quaternion(float angle_deg, Vec3 axis);
-	Quaternion(Vec3 from, Vec3 to);
+	Quaternion(float angle_deg, const Vec3 &axis);
+	Quaternion(const Vec3 &from, const Vec3 &to);
 
 	Quaternion	operator*(const Quaternion &other) const;
 	bool		operator==(const Quaternion &other) const;
@@ -23,4 +23,4 @@ struct	Quaternion
 	Quaternion	inverse(void) const;
 };
 
-std::ostream	&operator<<(std::ostream &os, const Quaternion quat);
+std::ostream	&operator<<(std::ostream &os, const Quaternion &quat);

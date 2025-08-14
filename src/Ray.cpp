@@ -1,6 +1,6 @@
 #include "../inc/Ray.hpp"
 
-Ray::Ray(Vec3 origin, Vec3 direction) : orig(origin), dir(direction)
+Ray::Ray(const Vec3 &origin, const Vec3 &direction) : orig(origin), dir(direction)
 {
 }
 
@@ -10,7 +10,7 @@ std::ostream	&operator<<(std::ostream &os, const Ray &ray)
 	return (os);
 }
 
-Vec3	rayAt(Ray ray, float t)
+Vec3	rayAt(const Ray &ray, float t)
 {
 	return ((ray.dir * t) + ray.orig);
 }

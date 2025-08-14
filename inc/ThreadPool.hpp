@@ -6,6 +6,7 @@
 #include <mutex>
 #include <condition_variable>
 
+// based on the example from geeksforgeeks.org
 class	ThreadPool
 {
 	public:

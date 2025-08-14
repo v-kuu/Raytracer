@@ -1,6 +1,6 @@
 #include "../inc/ALight.hpp"
 
-ALight::ALight(float red, float green, float blue, float intensity, Vec3 pos)
+ALight::ALight(float red, float green, float blue, float intensity, const Vec3 &pos)
 	: _red(red), _green(green), _blue(blue), _intensity(intensity), _pos(pos)
 {
 	if (_intensity < 0 || _intensity > 1)

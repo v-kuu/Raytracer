@@ -6,7 +6,7 @@ class	ALight
 {
 	public:
 		ALight(void) = delete;
-		ALight(float red, float green, float blue, float intensity, Vec3 pos);
+		ALight(float red, float green, float blue, float intensity, const Vec3 &pos);
 		virtual	~ALight(void) = default;
 
 		float	getRed(void) const;
