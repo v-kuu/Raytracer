@@ -9,3 +9,9 @@ Work in progress
 - Bounding volume hierarchy (BVH) to group objects in a scene to drastically cut ray intersection tests
 - Shading uses Blinn-Phong reflection model
 - Quaternions for camera rotations
+
+## Todo
+
+- More object types, lights and materials
+- Scene files and parser
+- Soft shadows
