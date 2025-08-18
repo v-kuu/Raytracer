@@ -18,31 +18,23 @@ Triangle&	Triangle::operator=(const Triangle &other)
 	return (*this);
 }
 
-//Möller-Trumbore
+// Inigo Quilez
 HitRecord	Triangle::detectHit(const Ray &ray)
 {
-	constexpr float epsilon = std::numeric_limits<float>::epsilon();
 	constexpr float miss = std::numeric_limits<float>::max();
 
 	Vec3 edge1 = _pos1 - _pos;
 	Vec3 edge2 = _pos2 - _pos;
-	Vec3 cross_r_e2 = cross(ray.dir, edge2);
-	float det = dot(edge1, cross_r_e2);
-	if (det > -epsilon && det < epsilon)
-		return (HitRecord(miss));
-	float det_inv = 1.0 / det;
 	Vec3 rop0 = ray.orig - _pos;
-	float u = det_inv * dot(rop0, cross_r_e2);
-	if (u < 0 || u > 1.0f)
+	Vec3 normal = cross(edge1, edge2);
+	Vec3 q = cross(rop0, ray.dir);
+	float det = 1.0 / dot(ray.dir, normal);
+	float u = det * dot(q * -1, edge2);
+	float v = det * dot(q, edge1);
+	float t = det * dot(normal * -1, rop0);
+	if (u < 0.0 || v < 0.0 || (u + v) > 1.0)
 		return (HitRecord(miss));
-	Vec3 cross_rop0_e1 = cross(rop0, edge1);
-	float v = det_inv * dot(ray.dir, cross_rop0_e1);
-	if (v < 0 || v > 1.0f)
-		return (HitRecord(miss));
-	float t = det_inv * dot(edge2, cross_rop0_e1);
-	if (t <= epsilon)
-		return (HitRecord(miss));
-	Vec3 normal = cross(edge1, edge2).normalize();
+	normal = normal.normalize();
 	if (dot(normal, ray.dir) > 0)
 		normal = normal * -1;
 	return (HitRecord(t, normal, rayAt(ray, t), _mat));
