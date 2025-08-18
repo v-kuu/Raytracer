@@ -1,12 +1,12 @@
 #include "../inc/Sphere.hpp"
 
 Sphere::Sphere(float radius, const Vec3 &center, std::shared_ptr<IMaterial> mat)
-	: AHittable(SPHERE, center, mat), _radius(radius)
+	: AHittable(center, mat), _radius(radius)
 {
 }
 
 Sphere::Sphere(const Sphere &other)
-	: AHittable(SPHERE, other._pos, other._mat), _radius(other._radius)
+	: AHittable(other._pos, other._mat), _radius(other._radius)
 {
 }
 
@@ -29,13 +29,15 @@ AABB	Sphere::boundingBox(void) const
 
 HitRecord	Sphere::detectHit(const Ray &ray)
 {
+	constexpr float miss = std::numeric_limits<float>::max();
+
 	Vec3	oc = _pos - ray.orig;
 	float	a = dot(ray.dir, ray.dir);
 	float	b = dot(ray.dir, oc);
 	float	c = dot(oc, oc) - _radius * _radius;
 	float	discriminant = b * b - a * c;
 	if (discriminant < 0)
-		return (HitRecord(std::numeric_limits<float>::max()));
+		return (HitRecord(miss));
 
 	float t1 = (b - sqrtf(discriminant)) / a;
 	float t2 = (b + sqrtf(discriminant)) / a;
@@ -50,7 +52,7 @@ HitRecord	Sphere::detectHit(const Ray &ray)
 		return (HitRecord(t2, ((hit_point - _pos).normalize()) * -1, hit_point, _mat));
 	}
 	else
-		return (HitRecord(std::numeric_limits<float>::max()));
+		return (HitRecord(miss));
 }
 
 float	Sphere::getRadius(void) const

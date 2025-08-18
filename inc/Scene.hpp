@@ -15,6 +15,7 @@
 #include "BlinnPhongMaterial.hpp"
 #include "NormalMaterial.hpp"
 #include "Sphere.hpp"
+#include "Triangle.hpp"
 #include "PointLight.hpp"
 
 class	AHittable;

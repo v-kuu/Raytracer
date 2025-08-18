@@ -8,6 +8,11 @@ Scene::Scene(void) : _cam(std::make_shared<Camera>(90, Vec3(0, 0, 5), Vec3(0, 0,
 	_objects.push_back(std::make_unique<Sphere>(2, Vec3(2, 0, -10), mat));
 	_objects.push_back(std::make_unique<Sphere>(2, Vec3(-3, 0, -5), mat2));
 	_objects.push_back(std::make_unique<Sphere>(3, Vec3(0, 0, -15), mat3));
+	_objects.push_back(std::make_unique<Triangle>(
+				Vec3(0, -4, 20),
+				Vec3(-20, -4, -20),
+				Vec3(20, -4, -20),
+				mat));
 	_lights.push_back(std::make_shared<PointLight>(1.0f, 1.0f, 1.0f, 1.0f, Vec3(-5, 10, -5)));
 	_bvh = std::make_unique<BVHNode>(_objects);
 }
