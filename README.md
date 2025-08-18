@@ -5,6 +5,7 @@ Work in progress
 
 ## Features
 
+- Spheres and triangles
 - A thread pool to distribute rendering to multiple threads
 - Bounding volume hierarchy (BVH) to group objects in a scene to drastically cut ray intersection tests
 - Shading uses Blinn-Phong reflection model
@@ -13,5 +14,6 @@ Work in progress
 ## Todo
 
 - More object types, lights and materials
+- Textures
 - Scene files and parser
 - Soft shadows

@@ -18,7 +18,6 @@ Triangle&	Triangle::operator=(const Triangle &other)
 	return (*this);
 }
 
-// Inigo Quilez
 HitRecord	Triangle::detectHit(const Ray &ray)
 {
 	constexpr float miss = std::numeric_limits<float>::max();
@@ -32,7 +31,7 @@ HitRecord	Triangle::detectHit(const Ray &ray)
 	float u = det * dot(q * -1, edge2);
 	float v = det * dot(q, edge1);
 	float t = det * dot(normal * -1, rop0);
-	if (u < 0.0 || v < 0.0 || (u + v) > 1.0)
+	if (std::min(u ,v) < 0.0 || (u + v) > 1.0)
 		return (HitRecord(miss));
 	normal = normal.normalize();
 	if (dot(normal, ray.dir) > 0)
