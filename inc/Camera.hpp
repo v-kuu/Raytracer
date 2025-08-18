@@ -19,6 +19,7 @@ class	Camera
 		Ray		pixelRay(int x, int y) const;
 		void	translate(const Vec3 &mov);
 		void	rotate(const Quaternion &quat);
+		void	update(void);
 
 	private:
 		float		_fov_rad;

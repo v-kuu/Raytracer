@@ -56,12 +56,16 @@ void	Camera::translate(const Vec3 &mov)
 
 void	Camera::rotate(const Quaternion &quat)
 {
+	_orientation = (_orientation * quat).normalize();
+}
+
+void	Camera::update(void)
+{
 	int width, height;
 	if (!SDL_GetWindowSizeInPixels
 			(Window::getInstance()->getWindow(), &width, &height))
 		throw (std::runtime_error("Failed to get window size"));
 
-	_orientation = (quat * _orientation).normalize();
 	_dir = _orientation.rotate(Vec3(0, 0, -1)).normalize();
 	_delta_u = _orientation.rotate(Vec3(1, 0, 0));
 	_delta_v = _orientation.rotate(Vec3(0, -1, 0));

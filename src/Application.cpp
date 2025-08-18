@@ -51,7 +51,6 @@ void	Application::run(void)
 		float r_up = 0;
 		float r_down = 0;
 		Vec3 mov(0, 0, 0);
-		Quaternion rot(1, 0, 0, 0);
 		while (SDL_PollEvent(&event))
 		{
 			if ((event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE)
@@ -96,12 +95,13 @@ void	Application::run(void)
 		}
 		if (to_render)
 		{
-			rot = (Quaternion(r_right, Vec3(0, -1 , 0))
+			Quaternion rot = (Quaternion(r_right, Vec3(0, -1 , 0))
 					* Quaternion(r_left, Vec3(0, 1, 0))
 					* Quaternion(r_up, Vec3(1, 0, 0))
 					* Quaternion(r_down, Vec3(-1, 0, 0))).normalize();
-			scene.getCam()->translate(mov);
 			scene.getCam()->rotate(rot);
+			scene.getCam()->translate(mov);
+			scene.getCam()->update();
 			scene.render(_canvas, pool);
 			to_render = false;
 		}
