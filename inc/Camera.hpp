@@ -17,6 +17,7 @@ class	Camera
 		Quaternion	getOrientation(void) const;
 
 		Ray		pixelRay(int x, int y) const;
+		void	translate(const Vec3 &mov);
 		void	rotate(const Quaternion &quat);
 
 	private:

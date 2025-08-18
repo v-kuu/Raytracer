@@ -4,14 +4,14 @@ Camera::Camera(float fov_degrees, const Vec3 &origin, const Vec3 &direction)
 {
 	_fov_rad = fov_degrees * (M_PI / 180);
 	_orig = origin;
-	_dir = direction.normalize();
 
 	int width, height;
 	if (!SDL_GetWindowSizeInPixels
 			(Window::getInstance()->getWindow(), &width, &height))
 		throw (std::runtime_error("Failed to get window size"));
 
-	_orientation = Quaternion(Vec3(0, 0, -1), _dir).normalize();
+	_orientation = Quaternion(Vec3(0, 0, -1), direction.normalize()).normalize();
+	_dir = _orientation.rotate(Vec3(0, 0, -1)).normalize();
 	_delta_u = _orientation.rotate(Vec3(1, 0, 0));
 	_delta_v = _orientation.rotate(Vec3(0, -1, 0));
 	float focal_length = (static_cast<float>(width) / 2) / (tan(_fov_rad / 2));
@@ -49,6 +49,11 @@ Ray	Camera::pixelRay(int x, int y) const
 	return (Ray(_orig, pixel_center - _orig));
 }
 
+void	Camera::translate(const Vec3 &mov)
+{
+	_orig = _orig + _orientation.rotate(mov);
+}
+
 void	Camera::rotate(const Quaternion &quat)
 {
 	int width, height;
@@ -57,7 +62,7 @@ void	Camera::rotate(const Quaternion &quat)
 		throw (std::runtime_error("Failed to get window size"));
 
 	_orientation = (quat * _orientation).normalize();
-	_dir = _orientation.rotate(_dir).normalize();
+	_dir = _orientation.rotate(Vec3(0, 0, -1)).normalize();
 	_delta_u = _orientation.rotate(Vec3(1, 0, 0));
 	_delta_v = _orientation.rotate(Vec3(0, -1, 0));
 	float focal_length = (static_cast<float>(width) / 2) / (tan(_fov_rad / 2));

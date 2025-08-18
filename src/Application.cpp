@@ -41,14 +41,17 @@ void	Application::run(void)
 {
 	Scene	scene = Scene();
 	ThreadPool	pool = ThreadPool(6);
-	Quaternion right(5, Vec3(0, -1, 0));
-	Quaternion left(5, Vec3(0, 1, 0));
-	Quaternion up(5, Vec3(1, 0, 0));
-	Quaternion down(5, Vec3(-1, 0, 0));
+	Vec3 mov;
+	SDL_Event event;
+	bool to_render = true;
 	while (true)
 	{
-		SDL_Event event;
-		bool to_render = true;
+		float r_right = 0;
+		float r_left = 0;
+		float r_up = 0;
+		float r_down = 0;
+		Vec3 mov(0, 0, 0);
+		Quaternion rot(1, 0, 0, 0);
 		while (SDL_PollEvent(&event))
 		{
 			if ((event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_ESCAPE)
@@ -60,21 +63,45 @@ void	Application::run(void)
 				switch (event.key.key)
 				{
 					case (SDLK_RIGHT):
-						scene.getCam()->rotate(right);
+						r_right += 5;
 						break ;
 					case (SDLK_LEFT):
-						scene.getCam()->rotate(left);
+						r_left += 5;
 						break ;
 					case (SDLK_UP):
-						scene.getCam()->rotate(up);
+						r_up += 5;
 						break ;
 					case (SDLK_DOWN):
-						scene.getCam()->rotate(down);
+						r_down += 5;
+						break ;
+					case (SDLK_D):
+						mov.x += 0.5f;
+						break ;
+					case (SDLK_A):
+						mov.x -= 0.5f;
+						break ;
+					case (SDLK_W):
+						mov.y += 0.5f;
+						break ;
+					case (SDLK_S):
+						mov.y -= 0.5f;
+						break ;
+					case (SDLK_R):
+						mov.z -= 0.5f;
+						break ;
+					case (SDLK_F):
+						mov.z += 0.5f;
 				}
 			}
 		}
 		if (to_render)
 		{
+			rot = (Quaternion(r_right, Vec3(0, -1 , 0))
+					* Quaternion(r_left, Vec3(0, 1, 0))
+					* Quaternion(r_up, Vec3(1, 0, 0))
+					* Quaternion(r_down, Vec3(-1, 0, 0))).normalize();
+			scene.getCam()->translate(mov);
+			scene.getCam()->rotate(rot);
 			scene.render(_canvas, pool);
 			to_render = false;
 		}
