@@ -51,7 +51,7 @@ $(NAME):		$(SDL) $(OBJECTS) $(HEADERS)
 $(SDL):
 	@echo -n "Building SDL3..."
 	@mkdir -p vendored/SDL/build
-	@(cd vendored/SDL && cmake -S . -B build -DSDL_STATIC=TRUE && cmake --build build -j4)
+	@(cd vendored/SDL && cmake -S . -B build -DSDL_STATIC=TRUE -DCMAKE_BUILD_TYPE=release && cmake --build build -j4)
 	@echo " Done."
 
 clean:

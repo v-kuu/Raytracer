@@ -9,7 +9,7 @@ class	BlinnPhongMaterial : public IMaterial
 {
 	public:
 		BlinnPhongMaterial(void) = delete;
-		BlinnPhongMaterial(float r, float g, float b);
+		BlinnPhongMaterial(float r, float g, float b, float ref);
 		~BlinnPhongMaterial(void) = default;
 		BlinnPhongMaterial(const BlinnPhongMaterial &other);
 		BlinnPhongMaterial	&operator=(const BlinnPhongMaterial &other);
@@ -23,4 +23,8 @@ class	BlinnPhongMaterial : public IMaterial
 		float	_red;
 		float	_green;
 		float	_blue;
+		float	_reflectivity;
+
+		Uint32	_baseColor(const Ray &ray, const HitRecord &hit, const Scene &sc) const;
+		Uint32	_reflectionColor(const Ray &ray, const HitRecord &hit, const Scene &sc) const;
 };

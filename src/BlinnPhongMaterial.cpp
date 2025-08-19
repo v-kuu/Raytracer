@@ -3,13 +3,14 @@
 float			BlinnPhongMaterial::_shininess = 32.0f;
 AmbientLight	BlinnPhongMaterial::_a = AmbientLight(1.0f, 1.0f, 1.0f, 0.2);
 
-BlinnPhongMaterial::BlinnPhongMaterial(float r, float g, float b)
-	: _red(r), _green(g), _blue(b)
+BlinnPhongMaterial::BlinnPhongMaterial(float r, float g, float b, float ref)
+	: _red(r), _green(g), _blue(b), _reflectivity(ref)
 {
 }
 
 BlinnPhongMaterial::BlinnPhongMaterial(const BlinnPhongMaterial &other)
-	: _red(other._red), _green(other._green), _blue(other._blue)
+	: _red(other._red), _green(other._green), _blue(other._blue),
+	  _reflectivity(other._reflectivity)
 {
 }
 
@@ -20,10 +21,24 @@ BlinnPhongMaterial&	BlinnPhongMaterial::operator=(const BlinnPhongMaterial &othe
 	_red = other._red;
 	_green = other._green;
 	_blue = other._blue;
+	_reflectivity = other._reflectivity;
 	return (*this);
 }
 
 Uint32	BlinnPhongMaterial::shade(const Ray &ray, const HitRecord &hit, const Scene &sc) const
+{
+	Uint32	base = _baseColor(ray, hit, sc);
+	Uint32	refl = 0;
+	if (_reflectivity > 0)
+	{
+		refl = _reflectionColor(ray, hit, sc);
+		return (std::lerp(base, refl, _reflectivity));
+	}
+	return (base);
+}
+
+Uint32	BlinnPhongMaterial::_baseColor(
+		const Ray &ray, const HitRecord &hit, const Scene &sc) const
 {
 	float ambient[3] = { _red * _a.getRed() * _a.getIntensity(),
 						_green * _a.getGreen() * _a.getIntensity(),
@@ -32,8 +47,8 @@ Uint32	BlinnPhongMaterial::shade(const Ray &ray, const HitRecord &hit, const Sce
 	std::shared_ptr<ALight> l = sc.getLights()[0];
 	Vec3 light_dir = (l->getPos() - hit.point).normalize();
 	float light_distance = (l->getPos() - hit.point).length();
-	Vec3 shadow_orig(hit.point + hit.normal * 1e-4);
-	Ray shadow_ray(shadow_orig, light_dir);
+	Vec3 new_orig(hit.point + hit.normal * 1e-4);
+	Ray shadow_ray(new_orig, light_dir);
 
 	HitRecord shadow = sc.getBVH()->intersect(shadow_ray);
 	if (shadow.t >= 0 && shadow.t < light_distance)
@@ -67,4 +82,16 @@ Uint32	BlinnPhongMaterial::shade(const Ray &ray, const HitRecord &hit, const Sce
 			std::clamp((ambient[2] + diffuse[2] + specular[2]), 0.0f, 1.0f));
 
 	return (red << 24 | green << 16 | blue << 8 | 0xFF);
+}
+
+Uint32	BlinnPhongMaterial::_reflectionColor(
+		const Ray &ray, const HitRecord &hit, const Scene &sc) const
+{
+	Vec3 new_orig(hit.point + hit.normal * 1e-4);
+	Ray refl_ray(new_orig, reflect(ray.dir * -1, hit.normal));
+	HitRecord r_hit = sc.getBVH()->intersect(refl_ray);
+	if (r_hit.t >= 0 && hit.t < std::numeric_limits<float>::max())
+		return (_baseColor(refl_ray, r_hit, sc));
+	else
+		return (0);
 }

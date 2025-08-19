@@ -26,3 +26,4 @@ std::ostream	&operator<<(std::ostream &os, const Vec3 &vec);
 
 float	dot(const Vec3 &lhs, const Vec3 &rhs);
 Vec3	cross(const Vec3 &lhs, const Vec3 &rhs);
+Vec3	reflect(const Vec3 &vec, const Vec3 &normal);
