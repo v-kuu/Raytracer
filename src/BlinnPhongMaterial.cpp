@@ -87,24 +87,24 @@ Uint32	BlinnPhongMaterial::_reflectionColor(
 		const Ray &ray, const HitRecord &hit, const Scene &sc) const
 {
 	Vec3 new_orig(hit.point + hit.normal * 1e-4);
-	Ray refl_ray(new_orig, reflect(ray.dir * -1, hit.normal));
+	Ray refl_ray(new_orig, reflect(ray.dir, hit.normal));
 	HitRecord r_hit = sc.getBVH()->intersect(refl_ray);
-	if (r_hit.t >= 0 && hit.t < std::numeric_limits<float>::max())
+	if (r_hit.t >= 0 && r_hit.t < std::numeric_limits<float>::max())
 		return (_baseColor(refl_ray, r_hit, sc));
 	else
-		return (0);
+		return (0x000000FF);
 }
 
 Uint32	BlinnPhongMaterial::_mixColor(Uint32 base, Uint32 refl) const
 {
-	Uint8 bcomp[3];
-	Uint8 rcomp[3];
-	bcomp[0] = base >> 24 & 0xFF;
-	bcomp[1] = base >> 16 & 0xFF;
-	bcomp[2] = base >> 8 & 0xFF;
-	rcomp[0] = refl >> 24 & 0xFF;
-	rcomp[1] = refl >> 16 & 0xFF;
-	rcomp[2] = refl >> 8 & 0xFF;
+	float bcomp[3];
+	float rcomp[3];
+	bcomp[0] = (base >> 24) & 0xFF;
+	bcomp[1] = (base >> 16) & 0xFF;
+	bcomp[2] = (base >> 8) & 0xFF;
+	rcomp[0] = (refl >> 24) & 0xFF;
+	rcomp[1] = (refl >> 16) & 0xFF;
+	rcomp[2] = (refl >> 8) & 0xFF;
 
 	Uint8 red = (bcomp[0] - rcomp[0]) * _reflectivity + rcomp[0];
 	Uint8 green = (bcomp[1] - rcomp[1]) * _reflectivity + rcomp[1];
