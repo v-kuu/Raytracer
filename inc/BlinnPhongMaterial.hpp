@@ -27,4 +27,5 @@ class	BlinnPhongMaterial : public IMaterial
 
 		Uint32	_baseColor(const Ray &ray, const HitRecord &hit, const Scene &sc) const;
 		Uint32	_reflectionColor(const Ray &ray, const HitRecord &hit, const Scene &sc) const;
+		Uint32	_mixColor(Uint32 base, Uint32 refl) const;
 };

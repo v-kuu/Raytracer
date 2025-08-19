@@ -28,11 +28,10 @@ BlinnPhongMaterial&	BlinnPhongMaterial::operator=(const BlinnPhongMaterial &othe
 Uint32	BlinnPhongMaterial::shade(const Ray &ray, const HitRecord &hit, const Scene &sc) const
 {
 	Uint32	base = _baseColor(ray, hit, sc);
-	Uint32	refl = 0;
 	if (_reflectivity > 0)
 	{
-		refl = _reflectionColor(ray, hit, sc);
-		return (std::lerp(base, refl, _reflectivity));
+		Uint32 refl = _reflectionColor(ray, hit, sc);
+		return(_mixColor(base, refl));
 	}
 	return (base);
 }
@@ -94,4 +93,21 @@ Uint32	BlinnPhongMaterial::_reflectionColor(
 		return (_baseColor(refl_ray, r_hit, sc));
 	else
 		return (0);
+}
+
+Uint32	BlinnPhongMaterial::_mixColor(Uint32 base, Uint32 refl) const
+{
+	Uint8 bcomp[3];
+	Uint8 rcomp[3];
+	bcomp[0] = base >> 24 & 0xFF;
+	bcomp[1] = base >> 16 & 0xFF;
+	bcomp[2] = base >> 8 & 0xFF;
+	rcomp[0] = refl >> 24 & 0xFF;
+	rcomp[1] = refl >> 16 & 0xFF;
+	rcomp[2] = refl >> 8 & 0xFF;
+
+	Uint8 red = (bcomp[0] - rcomp[0]) * _reflectivity + rcomp[0];
+	Uint8 green = (bcomp[1] - rcomp[1]) * _reflectivity + rcomp[1];
+	Uint8 blue = (bcomp[2] - rcomp[2]) * _reflectivity + rcomp[2];
+	return (red << 24 | green << 16 | blue << 8 | 0xFF);
 }
