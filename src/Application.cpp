@@ -17,7 +17,7 @@ Application::Application(void) : _renderer(nullptr), _canvas(nullptr)
 	try
 	{
 		_renderer = std::make_shared<Renderer>(Window::getInstance());
-		_canvas = std::make_shared<Texture>(_renderer);
+		_canvas = std::make_shared<Canvas>(_renderer);
 	}
 	catch (std::exception)
 	{

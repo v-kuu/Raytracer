@@ -44,12 +44,20 @@ HitRecord	Sphere::detectHit(const Ray &ray)
 	if (t1 >= 0)
 	{
 		Vec3 hit_point = rayAt(ray, t1);
-		return (HitRecord(t1, (hit_point - _pos).normalize(), hit_point, _mat));
+		float theta = std::acos(-hit_point.y);
+		float phi = std::atan2(-hit_point.z, hit_point.x) + M_PI;
+		float u = phi / (2 * M_PI);
+		float v = theta / M_PI;
+		return (HitRecord(t1, (hit_point - _pos).normalize(), hit_point, _mat, u, v));
 	}
 	else if (t2 >= 0)
 	{
 		Vec3 hit_point = rayAt(ray, t2);
-		return (HitRecord(t2, ((hit_point - _pos).normalize()) * -1, hit_point, _mat));
+		float theta = std::acos(-hit_point.y);
+		float phi = std::atan2(-hit_point.z, hit_point.x) + M_PI;
+		float u = phi / (2 * M_PI);
+		float v = theta / M_PI;
+		return (HitRecord(t2, ((hit_point - _pos).normalize()) * -1, hit_point, _mat, u, v));
 	}
 	else
 		return (HitRecord(miss));

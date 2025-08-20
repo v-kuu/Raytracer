@@ -3,14 +3,13 @@
 float			BlinnPhongMaterial::_shininess = 32.0f;
 AmbientLight	BlinnPhongMaterial::_a = AmbientLight(1.0f, 1.0f, 1.0f, 0.2);
 
-BlinnPhongMaterial::BlinnPhongMaterial(float r, float g, float b, float ref)
-	: _red(r), _green(g), _blue(b), _reflectivity(ref)
+BlinnPhongMaterial::BlinnPhongMaterial(std::shared_ptr<ITexture> tex, float ref)
+	: _texture(tex), _reflectivity(ref)
 {
 }
 
 BlinnPhongMaterial::BlinnPhongMaterial(const BlinnPhongMaterial &other)
-	: _red(other._red), _green(other._green), _blue(other._blue),
-	  _reflectivity(other._reflectivity)
+	: _texture(other._texture), _reflectivity(other._reflectivity)
 {
 }
 
@@ -18,30 +17,25 @@ BlinnPhongMaterial&	BlinnPhongMaterial::operator=(const BlinnPhongMaterial &othe
 {
 	if (this == &other)
 		return (*this);
-	_red = other._red;
-	_green = other._green;
-	_blue = other._blue;
+	_texture = other._texture;
 	_reflectivity = other._reflectivity;
 	return (*this);
 }
 
 Uint32	BlinnPhongMaterial::shade(const Ray &ray, const HitRecord &hit, const Scene &sc) const
 {
-	Uint32	base = _baseColor(ray, hit, sc);
+	Vec3	base = _baseColor(ray, hit, sc);
+	Vec3	refl;
 	if (_reflectivity > 0)
-	{
-		Uint32 refl = _reflectionColor(ray, hit, sc);
-		return(_mixColor(base, refl));
-	}
-	return (base);
+		refl = _reflectionColor(ray, hit, sc);
+	return(_mixColor(base, refl));
 }
 
-Uint32	BlinnPhongMaterial::_baseColor(
+Vec3	BlinnPhongMaterial::_baseColor(
 		const Ray &ray, const HitRecord &hit, const Scene &sc) const
 {
-	float ambient[3] = { _red * _a.getRed() * _a.getIntensity(),
-						_green * _a.getGreen() * _a.getIntensity(),
-						_blue * _a.getBlue() * _a.getIntensity() };
+	Vec3 tex_color = _texture->lookup(hit.u, hit.v, hit.point);
+	Vec3 ambient = tex_color * _a.getColor() * _a.getIntensity();
 
 	std::shared_ptr<ALight> l = sc.getLights()[0];
 	Vec3 light_dir = (l->getPos() - hit.point).normalize();
@@ -51,39 +45,25 @@ Uint32	BlinnPhongMaterial::_baseColor(
 
 	HitRecord shadow = sc.getBVH()->intersect(shadow_ray);
 	if (shadow.t >= 0 && shadow.t < light_distance)
-	{
-		Uint8 red = static_cast<Uint8>(255 *
-				std::clamp(ambient[0], 0.0f, 1.0f));
-		Uint8 green = static_cast<Uint8>(255 *
-				std::clamp(ambient[1], 0.0f, 1.0f));
-		Uint8 blue = static_cast<Uint8>(255 *
-				std::clamp(ambient[2], 0.0f, 1.0f));
-		return (red << 24 | green << 16 | blue << 8 | 0xFF);
-	}
+		return (ambient);
 
 	float diff = fmax(dot(hit.normal, light_dir), 0.0f);
-	float diffuse[3] = { _red * l->getRed() * diff,
-						_green * l->getGreen() * diff,
-						_blue * l->getBlue() * diff };
+	Vec3 diffuse = tex_color * l->getColor() * diff;
 
 	Vec3 view_dir = (ray.dir * -1).normalize();
 	Vec3 halfway = (light_dir + view_dir).normalize();
 	float spec = powf(fmax(dot(hit.normal, halfway), 0.0f), _shininess);
-	float specular[3] = { l->getRed() * spec,
-						l->getGreen() * spec,
-						l->getBlue() * spec };
+	Vec3 specular = l->getColor() * spec;
 
-	Uint8 red = static_cast<Uint8>(255 *
-			std::clamp((ambient[0] + diffuse[0] + specular[0]), 0.0f, 1.0f));
-	Uint8 green = static_cast<Uint8>(255 *
-			std::clamp((ambient[1] + diffuse[1] + specular[1]), 0.0f, 1.0f));
-	Uint8 blue = static_cast<Uint8>(255 *
-			std::clamp((ambient[2] + diffuse[2] + specular[2]), 0.0f, 1.0f));
+	Vec3 base = ambient + diffuse + specular;
+	base.x = std::clamp(base.x, 0.0f, 1.0f);
+	base.y = std::clamp(base.y, 0.0f, 1.0f);
+	base.z = std::clamp(base.z, 0.0f, 1.0f);
 
-	return (red << 24 | green << 16 | blue << 8 | 0xFF);
+	return (base);
 }
 
-Uint32	BlinnPhongMaterial::_reflectionColor(
+Vec3	BlinnPhongMaterial::_reflectionColor(
 		const Ray &ray, const HitRecord &hit, const Scene &sc) const
 {
 	Vec3 new_orig(hit.point + hit.normal * 1e-4);
@@ -92,22 +72,17 @@ Uint32	BlinnPhongMaterial::_reflectionColor(
 	if (r_hit.t >= 0 && r_hit.t < std::numeric_limits<float>::max())
 		return (_baseColor(refl_ray, r_hit, sc));
 	else
-		return (0x000000FF);
+		return (Vec3());
 }
 
-Uint32	BlinnPhongMaterial::_mixColor(Uint32 base, Uint32 refl) const
+Uint32	BlinnPhongMaterial::_mixColor(const Vec3 &base, const Vec3 &refl) const
 {
-	float bcomp[3];
-	float rcomp[3];
-	bcomp[0] = (base >> 24) & 0xFF;
-	bcomp[1] = (base >> 16) & 0xFF;
-	bcomp[2] = (base >> 8) & 0xFF;
-	rcomp[0] = (refl >> 24) & 0xFF;
-	rcomp[1] = (refl >> 16) & 0xFF;
-	rcomp[2] = (refl >> 8) & 0xFF;
 
-	Uint8 red = (bcomp[0] - rcomp[0]) * _reflectivity + rcomp[0];
-	Uint8 green = (bcomp[1] - rcomp[1]) * _reflectivity + rcomp[1];
-	Uint8 blue = (bcomp[2] - rcomp[2]) * _reflectivity + rcomp[2];
+	Uint8 red = static_cast<Uint8>(255 *
+			(base.x * (1 - _reflectivity) + refl.x * _reflectivity));
+	Uint8 green = static_cast<Uint8>(255 *
+			(base.y * (1 - _reflectivity) + refl.y * _reflectivity));
+	Uint8 blue = static_cast<Uint8>(255 *
+			(base.z * (1 - _reflectivity) + refl.z * _reflectivity));
 	return (red << 24 | green << 16 | blue << 8 | 0xFF);
 }

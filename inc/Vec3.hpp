@@ -14,6 +14,7 @@ struct	Vec3
 	Vec3			operator+(const Vec3 &other) const;
 	Vec3			operator-(const Vec3 &other) const;
 	Vec3			operator*(float scalar) const;
+	Vec3			operator*(const Vec3 &other) const;
 	Vec3			operator/(float scalar) const;
 	float			&operator[](unsigned int i);
 	const float		&operator[](unsigned int i) const;

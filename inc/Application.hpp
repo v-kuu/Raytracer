@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include "Renderer.hpp"
-#include "Texture.hpp"
+#include "Canvas.hpp"
 #include "Scene.hpp"
 #include "ThreadPool.hpp"
 
@@ -17,5 +17,5 @@ class	Application
 
 	private:
 		std::shared_ptr<Renderer>	_renderer;
-		std::shared_ptr<Texture>	_canvas;
+		std::shared_ptr<Canvas>	_canvas;
 };

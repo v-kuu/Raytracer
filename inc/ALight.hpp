@@ -9,16 +9,12 @@ class	ALight
 		ALight(float red, float green, float blue, float intensity, const Vec3 &pos);
 		virtual	~ALight(void) = default;
 
-		float	getRed(void) const;
-		float	getGreen(void) const;
-		float	getBlue(void) const;
-		float	getIntensity(void) const;
+		Vec3	getColor(void) const;
 		Vec3	getPos(void) const;
+		float	getIntensity(void) const;
 
 	protected:
-		float	_red;
-		float	_green;
-		float	_blue;
-		float	_intensity;
+		Vec3	_color;
 		Vec3	_pos;
+		float	_intensity;
 };

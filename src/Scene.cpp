@@ -2,8 +2,10 @@
 
 Scene::Scene(void) : _cam(std::make_shared<Camera>(90, Vec3(0, 0, 5), Vec3(0, 0, -1)))
 {
-	std::shared_ptr<IMaterial> mat = std::make_shared<BlinnPhongMaterial>(1.0f, 0.5f, 0.5f, 0.5f);
-	std::shared_ptr<IMaterial> mat2 = std::make_shared<BlinnPhongMaterial>(0.5f, 0.5f, 1.0f, 0);
+	std::shared_ptr<ITexture> tex1 = std::make_shared<SolidColorTexture>(1.0f, 0.5f, 0.5f);
+	std::shared_ptr<ITexture> tex2 = std::make_shared<SolidColorTexture>(0.5f, 0.5f, 1.0f);
+	std::shared_ptr<IMaterial> mat = std::make_shared<BlinnPhongMaterial>(tex1, 0.5f);
+	std::shared_ptr<IMaterial> mat2 = std::make_shared<BlinnPhongMaterial>(tex2, 0);
 	std::shared_ptr<IMaterial> mat3 = std::make_shared<NormalMaterial>();
 	_objects.push_back(std::make_unique<Sphere>(2, Vec3(2, 0, -10), mat));
 	_objects.push_back(std::make_unique<Sphere>(2, Vec3(-3, 0, -5), mat2));
@@ -17,7 +19,7 @@ Scene::Scene(void) : _cam(std::make_shared<Camera>(90, Vec3(0, 0, 5), Vec3(0, 0,
 	_bvh = std::make_unique<BVHNode>(_objects);
 }
 
-void	Scene::render(std::shared_ptr<Texture> target, ThreadPool &pool)
+void	Scene::render(std::shared_ptr<Canvas> target, ThreadPool &pool)
 {
 	std::shared_ptr<Renderer> renderer = target->getRenderer();
 	SkyboxMaterial	skybox;
@@ -29,6 +31,7 @@ void	Scene::render(std::shared_ptr<Texture> target, ThreadPool &pool)
 		throw (std::runtime_error("Failed to get texture size"));
 	if (!SDL_LockTexture(target->getTexture(), NULL, &pixels, &pitch))
 		throw (std::runtime_error("Could not lock SDL texture"));
+
 	pixel_buffer = static_cast<Uint32*>(pixels);
 	int thread_count = pool.getSize();
 	int rows_per_thread = h / thread_count;

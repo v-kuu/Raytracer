@@ -2,7 +2,7 @@
 #include <vector>
 #include <limits>
 #include <memory>
-#include "Texture.hpp"
+#include "Canvas.hpp"
 #include "Camera.hpp"
 #include "ALight.hpp"
 #include "IMaterial.hpp"
@@ -13,6 +13,8 @@
 #include "IMaterial.hpp"
 #include "SkyboxMaterial.hpp"
 #include "BlinnPhongMaterial.hpp"
+#include "ITexture.hpp"
+#include "SolidColorTexture.hpp"
 #include "NormalMaterial.hpp"
 #include "Sphere.hpp"
 #include "Triangle.hpp"
@@ -31,7 +33,7 @@ class	Scene
 		Scene(const Scene &other) = delete;
 		Scene	&operator=(const Scene &other) = delete;
 
-		void	render(std::shared_ptr<Texture> target, ThreadPool &pool);
+		void	render(std::shared_ptr<Canvas> target, ThreadPool &pool);
 
 		std::shared_ptr<Camera>	getCam(void) const;
 		const std::vector<std::unique_ptr<AHittable>>	&getObjects(void) const;

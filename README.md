@@ -13,7 +13,8 @@ Work in progress
 
 ## Todo
 
-- More object types, lights and materials
+- Handle multiple lights
+- Early exits from rendering for inputs
 - Textures
 - Scene files and parser
 - Soft shadows

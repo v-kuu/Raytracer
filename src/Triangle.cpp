@@ -36,7 +36,7 @@ HitRecord	Triangle::detectHit(const Ray &ray)
 	normal = normal.normalize();
 	if (dot(normal, ray.dir) > 0)
 		normal = normal * -1;
-	return (HitRecord(t, normal, rayAt(ray, t), _mat));
+	return (HitRecord(t, normal, rayAt(ray, t), _mat, u, v));
 }
 
 AABB	Triangle::boundingBox(void) const

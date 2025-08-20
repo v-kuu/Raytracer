@@ -3,11 +3,11 @@
 #include <SDL3/SDL.h>
 #include "Renderer.hpp"
 
-class	Texture
+class	Canvas
 {
 	public:
-		Texture(std::shared_ptr<Renderer> renderer);
-		~Texture(void);
+		Canvas(std::shared_ptr<Renderer> renderer);
+		~Canvas(void);
 
 		SDL_Texture					*getTexture(void);
 		std::shared_ptr<Renderer>	getRenderer(void);

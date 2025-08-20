@@ -1,6 +1,6 @@
-#include "../inc/Texture.hpp"
+#include "../inc/Canvas.hpp"
 
-Texture::Texture(std::shared_ptr<Renderer> renderer) : _renderer(renderer)
+Canvas::Canvas(std::shared_ptr<Renderer> renderer) : _renderer(renderer)
 {
 	int width, height;
 
@@ -18,17 +18,17 @@ Texture::Texture(std::shared_ptr<Renderer> renderer) : _renderer(renderer)
 		throw (std::runtime_error("Failed to create SDL texture"));
 }
 
-Texture::~Texture(void)
+Canvas::~Canvas(void)
 {
 	SDL_DestroyTexture(_texture);
 }
 
-SDL_Texture*	Texture::getTexture(void)
+SDL_Texture*	Canvas::getTexture(void)
 {
 	return (_texture);
 }
 
-std::shared_ptr<Renderer>	Texture::getRenderer(void)
+std::shared_ptr<Renderer>	Canvas::getRenderer(void)
 {
 	return (_renderer);
 }
