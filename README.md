@@ -13,6 +13,7 @@ Work in progress
 
 ## Todo
 
+- RayTracer class
 - Handle multiple lights
 - Early exits from rendering for inputs
 - Textures
