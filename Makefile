@@ -50,6 +50,11 @@ $(NAME):		$(SDL) $(OBJECTS) $(HEADERS)
 	@echo " Done."
 
 $(SDL):
+	@if [ ! -d "vendored/SDL/.git" ]; then \
+		echo -n "Initializing SDL submodule..."; \
+		git submodule update --init --recursive; \
+		echo " Done."; \
+	fi
 	@echo -n "Building SDL3..."
 	@mkdir -p vendored/SDL/build
 	@(cd vendored/SDL && cmake -S . -B build -DSDL_STATIC=TRUE -DCMAKE_BUILD_TYPE=release && cmake --build build -j4)
