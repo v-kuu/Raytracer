@@ -39,8 +39,9 @@ Application::~Application(void)
 
 void	Application::run(void)
 {
-	Scene	scene = Scene();
+	std::shared_ptr<Scene> scene = std::make_shared<Scene>();
 	ThreadPool	pool = ThreadPool(6);
+	RayTracer rt(pool, 1);
 	Vec3 mov;
 	SDL_Event event;
 	bool to_render = true;
@@ -99,10 +100,10 @@ void	Application::run(void)
 					* Quaternion(r_left, Vec3(0, 1, 0))
 					* Quaternion(r_up, Vec3(1, 0, 0))
 					* Quaternion(r_down, Vec3(-1, 0, 0))).normalize();
-			scene.getCam()->rotate(rot);
-			scene.getCam()->translate(mov);
-			scene.getCam()->update();
-			scene.render(_canvas, pool);
+			scene->getCam()->rotate(rot);
+			scene->getCam()->translate(mov);
+			scene->getCam()->update();
+			rt.render(_canvas, scene);
 			to_render = false;
 		}
 		SDL_Delay(16);

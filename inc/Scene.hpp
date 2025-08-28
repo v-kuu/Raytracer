@@ -2,16 +2,11 @@
 #include <vector>
 #include <limits>
 #include <memory>
-#include "Canvas.hpp"
 #include "Camera.hpp"
 #include "ALight.hpp"
 #include "IMaterial.hpp"
-#include "AHittable.hpp"
-#include "HitRecord.hpp"
 #include "BVHNode.hpp"
-#include "ThreadPool.hpp"
 #include "IMaterial.hpp"
-#include "SkyboxMaterial.hpp"
 #include "BlinnPhongMaterial.hpp"
 #include "ITexture.hpp"
 #include "SolidColorTexture.hpp"
@@ -32,8 +27,6 @@ class	Scene
 		~Scene(void) = default;
 		Scene(const Scene &other) = delete;
 		Scene	&operator=(const Scene &other) = delete;
-
-		void	render(std::shared_ptr<Canvas> target, ThreadPool &pool);
 
 		std::shared_ptr<Camera>	getCam(void) const;
 		const std::vector<std::unique_ptr<AHittable>>	&getObjects(void) const;

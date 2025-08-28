@@ -4,6 +4,7 @@
 #include "Canvas.hpp"
 #include "Scene.hpp"
 #include "ThreadPool.hpp"
+#include "RayTracer.hpp"
 
 class	Application
 {
