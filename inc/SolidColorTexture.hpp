@@ -1,6 +1,5 @@
 #pragma once
 #include "ITexture.hpp"
-#include <algorithm>
 
 class	SolidColorTexture : public ITexture
 {
