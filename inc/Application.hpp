@@ -17,6 +17,6 @@ class	Application
 		void	run(void);
 
 	private:
-		std::shared_ptr<Renderer>	_renderer;
-		std::shared_ptr<Canvas>	_canvas;
+		std::shared_ptr<Renderer> _renderer;
+		std::unique_ptr<Canvas> _canvas;
 };

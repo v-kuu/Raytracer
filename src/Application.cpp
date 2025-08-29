@@ -17,7 +17,7 @@ Application::Application(void) : _renderer(nullptr), _canvas(nullptr)
 	try
 	{
 		_renderer = std::make_shared<Renderer>(Window::getInstance());
-		_canvas = std::make_shared<Canvas>(_renderer);
+		_canvas = std::make_unique<Canvas>(_renderer);
 	}
 	catch (std::exception)
 	{
@@ -103,7 +103,7 @@ void	Application::run(void)
 			scene->getCam()->rotate(rot);
 			scene->getCam()->translate(mov);
 			scene->getCam()->update();
-			rt.render(_canvas, scene);
+			rt.render(*_canvas, *scene);
 			to_render = false;
 		}
 		SDL_Delay(16);

@@ -1,5 +1,4 @@
 #pragma once
-#include <memory>
 #include "Canvas.hpp"
 #include "Camera.hpp"
 #include "Scene.hpp"
@@ -14,7 +13,7 @@ class	RayTracer
 		RayTracer(const RayTracer &other) = delete;
 		RayTracer	&operator=(const RayTracer &other) = delete;
 
-		void	render(std::shared_ptr<Canvas> target, std::shared_ptr<Scene> sc);
+		void	render(Canvas &target, Scene &sc);
 
 	private:
 		ThreadPool	&_pool;

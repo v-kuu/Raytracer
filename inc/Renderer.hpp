@@ -8,7 +8,7 @@ class	Renderer
 		Renderer(Window *window);
 		~Renderer(void);
 
-		SDL_Renderer*	getRenderer(void);
+		SDL_Renderer*	getRenderer(void) const;
 
 	private:
 		SDL_Renderer	*_renderer;

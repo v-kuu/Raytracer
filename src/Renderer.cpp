@@ -7,7 +7,7 @@ Renderer::Renderer(Window *window)
 		throw (std::runtime_error("Unable to create SDL renderer"));
 }
 
-SDL_Renderer*	Renderer::getRenderer(void)
+SDL_Renderer*	Renderer::getRenderer(void) const
 {
 	return (_renderer);
 }
