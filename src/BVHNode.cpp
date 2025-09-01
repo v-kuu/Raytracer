@@ -15,7 +15,7 @@ BVHNode::BVHNode(std::vector<std::unique_ptr<AHittable>> &objects)
 	{
 		std::vector<std::unique_ptr<AHittable>> left_objs;
 		std::vector<std::unique_ptr<AHittable>> right_objs;
-		std::sort(objects.begin(), objects.end());
+		_sortSAH();
 
 		size_t cutoff = objects.size() / 2;
 		left_objs.assign(
@@ -32,6 +32,48 @@ BVHNode::BVHNode(std::vector<std::unique_ptr<AHittable>> &objects)
 bool	BVHNode::operator<(const BVHNode &other)
 {
 	return (volume < other.volume);
+}
+
+// Sort the objects based on surface area heuristics
+void	BVHNode::_sortSAH(void)
+{
+	int axis;
+	auto sort = 
+	[&axis](std::unique_ptr<AHittable> &first, std::unique_ptr<AHittable> &second)
+	{
+		return (first->boundingBox().center()[axis] < second->boundingBox().center()[axis]);
+	};
+
+	size_t cutoff = objects.size() / 2;
+	int best_axis = 0;
+	float lowest_cost = std::numeric_limits<float>::max();
+	for (int i = 0; i < 3; ++i)
+	{
+		axis = i;
+		AABB box1;
+		AABB box2;
+		int count1 = 0;
+		int count2 = 0;
+		std::sort(objects.begin(), objects.end(), sort);
+		for (auto obj = objects.begin(); obj < objects.begin() + cutoff; ++obj)
+		{
+			box1.extend((*obj)->boundingBox());
+			count1++;
+		}
+		for (auto obj = objects.begin() + cutoff; obj < objects.end(); ++obj)
+		{
+			box2.extend((*obj)->boundingBox());
+			count2++;
+		}
+		float cost = (box1.surfaceArea() * count1 + box2.surfaceArea() * count2) / volume.surfaceArea();
+		if (cost < lowest_cost)
+		{
+			best_axis = axis;
+			lowest_cost = cost;
+		}
+	}
+	axis = best_axis;
+	std::sort(objects.begin(), objects.end(), sort);
 }
 
 HitRecord	BVHNode::intersect(const Ray &ray) const

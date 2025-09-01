@@ -45,6 +45,15 @@ Vec3	AABB::center(void) const
 	return (ret);
 }
 
+float	AABB::surfaceArea(void) const
+{
+	Vec3 size = max - min;
+	return (2.0f * (
+			size.x * size.y +
+			size.x * size.z +
+			size.y * size.z));
+}
+
 //Andrew Woo's 1990 algorithm optimized by Pierre Terdiman in 2000
 bool	AABB::intersect(const Ray &ray) const
 {

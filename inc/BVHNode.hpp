@@ -19,6 +19,7 @@ struct	BVHNode
 
 	bool	operator<(const BVHNode &other);
 
+	void		_sortSAH(void);
 	HitRecord	intersect(const Ray &ray) const;
 	bool		isLeaf(void) const;
 };

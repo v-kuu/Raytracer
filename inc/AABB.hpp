@@ -14,5 +14,6 @@ struct	AABB
 	void	extend(const AABB &other);
 	void	extend(const Vec3 &point);
 	Vec3	center(void) const;
+	float	surfaceArea(void) const;
 	bool	intersect(const Ray &ray) const;
 };
