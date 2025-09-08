@@ -10,6 +10,7 @@
 #include "BlinnPhongMaterial.hpp"
 #include "ITexture.hpp"
 #include "SolidColorTexture.hpp"
+#include "ImageTexture.hpp"
 #include "NormalMaterial.hpp"
 #include "Sphere.hpp"
 #include "Triangle.hpp"

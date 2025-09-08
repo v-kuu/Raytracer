@@ -38,14 +38,15 @@ HitRecord	Sphere::detectHit(const Ray &ray)
 	float	discriminant = b * b - a * c;
 	if (discriminant < 0)
 		return (HitRecord(miss));
-
-	float t1 = (b - sqrtf(discriminant)) / a;
-	float t2 = (b + sqrtf(discriminant)) / a;
+	float disc_square = sqrtf(discriminant);
+	float t1 = (b - disc_square) / a;
+	float t2 = (b + disc_square) / a;
 	if (t1 >= 0)
 	{
 		Vec3 hit_point = rayAt(ray, t1);
-		float theta = std::acos(-hit_point.y);
-		float phi = std::atan2(-hit_point.z, hit_point.x) + M_PI;
+		Vec3 local_p = (hit_point - _pos).normalize();
+		float theta = std::acos(-local_p.y);
+		float phi = std::atan2(-local_p.z, local_p.x) + M_PI;
 		float u = phi / (2 * M_PI);
 		float v = theta / M_PI;
 		return (HitRecord(t1, (hit_point - _pos).normalize(), hit_point, _mat, u, v));
@@ -53,8 +54,9 @@ HitRecord	Sphere::detectHit(const Ray &ray)
 	else if (t2 >= 0)
 	{
 		Vec3 hit_point = rayAt(ray, t2);
-		float theta = std::acos(-hit_point.y);
-		float phi = std::atan2(-hit_point.z, hit_point.x) + M_PI;
+		Vec3 local_p = (hit_point - _pos).normalize();
+		float theta = std::acos(-local_p.y);
+		float phi = std::atan2(-local_p.z, local_p.x) + M_PI;
 		float u = phi / (2 * M_PI);
 		float v = theta / M_PI;
 		return (HitRecord(t2, ((hit_point - _pos).normalize()) * -1, hit_point, _mat, u, v));
