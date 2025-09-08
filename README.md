@@ -1,5 +1,5 @@
 # Software raytracer written in C++
-Utilizes SDL3 to handle window management, keyboard input etc. It is included as a vendored static library as per their zlib license.
+Utilizes SDL3 to handle window management, keyboard input etc.
 
 Work in progress
 
