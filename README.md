@@ -3,6 +3,18 @@ Utilizes SDL3 to handle window management, keyboard input etc.
 
 Work in progress
 
+## Installation
+Clone the repo wherever and then in the repository root:
+```
+mkdir -p build
+(cd build && cmake ..)
+cmake --build build -4
+```
+You will then find the binary in the build directory:
+```
+./build/raytracer
+```
+
 ## Features
 
 - Spheres and triangles
