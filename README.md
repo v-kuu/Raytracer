@@ -5,13 +5,13 @@ Work in progress
 
 ## Installation (Linux)
 Clone the repo wherever and then in the repository root:
-```
+```bash
 mkdir -p build
 (cd build && cmake ..)
 cmake --build build -4
 ```
 You will then find the binary in the build directory:
-```
+```bash
 ./build/raytracer
 ```
 
