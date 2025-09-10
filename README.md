@@ -3,7 +3,7 @@ Utilizes SDL3 to handle window management, keyboard input etc.
 
 Work in progress
 
-## Installation
+## Installation (Linux)
 Clone the repo wherever and then in the repository root:
 ```
 mkdir -p build
