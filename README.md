@@ -27,6 +27,8 @@ You will then find the binary in the build directory:
 
 - Handle multiple lights
 - Early exits from rendering for inputs
+- Full SAH for BVH
 - Textures
 - Scene files and parser
 - Soft shadows
+- GPU
