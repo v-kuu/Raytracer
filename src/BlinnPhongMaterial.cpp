@@ -3,13 +3,17 @@
 float			BlinnPhongMaterial::_shininess = 32.0f;
 AmbientLight	BlinnPhongMaterial::_a = AmbientLight(1.0f, 1.0f, 1.0f, 0.2);
 
-BlinnPhongMaterial::BlinnPhongMaterial(std::shared_ptr<ITexture> tex, float ref)
-	: _texture(tex), _reflectivity(ref)
+BlinnPhongMaterial::BlinnPhongMaterial(std::shared_ptr<ITexture> tex,
+		float ref,
+		std::optional<std::shared_ptr<ITexture>> normalMap)
+	: _texture(tex), _reflectivity(ref), _normalMap(normalMap)
 {
 }
 
 BlinnPhongMaterial::BlinnPhongMaterial(const BlinnPhongMaterial &other)
-	: _texture(other._texture), _reflectivity(other._reflectivity)
+	: _texture(other._texture),
+	_reflectivity(other._reflectivity),
+	_normalMap(other._normalMap)
 {
 }
 
@@ -19,6 +23,7 @@ BlinnPhongMaterial&	BlinnPhongMaterial::operator=(const BlinnPhongMaterial &othe
 		return (*this);
 	_texture = other._texture;
 	_reflectivity = other._reflectivity;
+	_normalMap = other._normalMap;
 	return (*this);
 }
 
@@ -47,12 +52,18 @@ Vec3	BlinnPhongMaterial::_baseColor(
 	if (shadow.t >= 0 && shadow.t < light_distance)
 		return (ambient);
 
-	float diff = fmax(dot(hit.normal, light_dir), 0.0f);
+	Vec3 normal;
+	if (_normalMap)
+		normal = _sampleNormalMap(hit);
+	else
+		normal = hit.normal;
+
+	float diff = fmax(dot(normal, light_dir), 0.0f);
 	Vec3 diffuse = tex_color * l->getColor() * diff;
 
 	Vec3 view_dir = (ray.dir * -1).normalize();
 	Vec3 halfway = (light_dir + view_dir).normalize();
-	float spec = powf(fmax(dot(hit.normal, halfway), 0.0f), _shininess);
+	float spec = powf(fmax(dot(normal, halfway), 0.0f), _shininess);
 	Vec3 specular = l->getColor() * spec;
 
 	Vec3 base = ambient + diffuse + specular;
@@ -85,4 +96,13 @@ Uint32	BlinnPhongMaterial::_mixColor(const Vec3 &base, const Vec3 &refl) const
 	Uint8 blue = static_cast<Uint8>(255 *
 			(base.z * (1 - _reflectivity) + refl.z * _reflectivity));
 	return (red << 24 | green << 16 | blue << 8 | 0xFF);
+}
+
+Vec3	BlinnPhongMaterial::_sampleNormalMap(const HitRecord &hit) const
+{
+	Vec3 tangentNormal = _texture->lookup(hit.u, hit.v, hit.point);
+	tangentNormal.x = tangentNormal.x * 2.0 - 1.0;
+	tangentNormal.y = tangentNormal.y * 2.0 - 1.0;
+	tangentNormal.z = tangentNormal.z * 2.0 - 1.0;
+	Quaternion to_world(Vec3(0, 0, 1), hit.normal);
 }
