@@ -101,8 +101,9 @@ Uint32	BlinnPhongMaterial::_mixColor(const Vec3 &base, const Vec3 &refl) const
 Vec3	BlinnPhongMaterial::_sampleNormalMap(const HitRecord &hit) const
 {
 	Vec3 tangentNormal = _texture->lookup(hit.u, hit.v, hit.point);
-	tangentNormal.x = tangentNormal.x * 2.0 - 1.0;
-	tangentNormal.y = tangentNormal.y * 2.0 - 1.0;
-	tangentNormal.z = tangentNormal.z * 2.0 - 1.0;
-	Quaternion to_world(Vec3(0, 0, 1), hit.normal);
+	tangentNormal = tangentNormal * 2.0 - Vec3(1, 1, 1);
+	Vec3 worldNormal = hit.tangent * tangentNormal.x +
+		hit.bitangent * tangentNormal.y +
+		hit.normal * tangentNormal.z;
+	return (worldNormal);
 }

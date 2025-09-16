@@ -25,8 +25,8 @@ class	BlinnPhongMaterial : public IMaterial
 		static AmbientLight	_a;
 
 		std::shared_ptr<ITexture> _texture;
-		std::optional<std::shared_ptr<ITexture>> _normalMap;
 		float _reflectivity;
+		std::optional<std::shared_ptr<ITexture>> _normalMap;
 
 		Vec3 _baseColor(const Ray &ray, const HitRecord &hit, const Scene &sc) const;
 		Vec3 _reflectionColor(const Ray &ray, const HitRecord &hit, const Scene &sc) const;

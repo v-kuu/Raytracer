@@ -1,5 +1,6 @@
 #pragma once
 #include "AHittable.hpp"
+#include "Vec2.hpp"
 
 class	Triangle : public AHittable
 {
@@ -16,4 +17,7 @@ class	Triangle : public AHittable
 	private:
 		Vec3	_pos1;
 		Vec3	_pos2;
+		Vec2	_uv0;
+		Vec2	_uv1;
+		Vec2	_uv2;
 };
