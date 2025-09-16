@@ -9,7 +9,7 @@ ImageTexture::ImageTexture(const std::string &filename)
 	if (buffer == nullptr)
 		throw (std::runtime_error("ImageTexture file error"));
 	const SDL_PixelFormatDetails *format = SDL_GetPixelFormatDetails(buffer->format);
-	if (!buffer)
+	if (!format)
 	{
 		SDL_DestroySurface(buffer);
 		throw (std::runtime_error("Failed to fetch pixel format details"));
@@ -28,14 +28,32 @@ ImageTexture::ImageTexture(const std::string &filename)
 	SDL_DestroySurface(buffer);
 }
 
+// Inludes bilinear filtering
 Vec3	ImageTexture::lookup(float u, float v, const Vec3 &point)
 {
 	(void)point;
 	u = std::clamp(u, 0.0f, 1.0f);
 	v = std::clamp(v, 0.0f, 1.0f);
-	int x = static_cast<int>(u * (_width - 1));
-	int y = static_cast<int>(v * (_height - 1));
-	return (_texels[y * _width + x]);
+
+	float x = u * (_width - 1);
+	float y = v * (_height - 1);
+
+	int x0 = static_cast<int>(std::floor(x));
+	int x1 = std::min(x0 + 1, _width - 1);
+	int y0 = static_cast<int>(std::floor(y));
+	int y1 = std::min(y0 + 1, _height - 1);
+	float tx = x - x0;
+	float ty = y - y0;
+
+	Vec3 c00 = _texels[y0 * _width + x0];
+	Vec3 c10 = _texels[y0 * _width + x1];
+	Vec3 c01 = _texels[y1 * _width + x0];
+	Vec3 c11 = _texels[y1 * _width + x1];
+
+	Vec3 c0 = c00 * (1.0f - tx) + c10 * tx;
+	Vec3 c1 = c01 * (1.0f - tx) + c11 * tx;
+	Vec3 final = c0 * (1.0f - ty) + c1 * ty;
+	return (final);
 }
 
 Vec3	ImageTexture::_getRGB(Uint32 color, const SDL_PixelFormatDetails *format)

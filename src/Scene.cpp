@@ -3,8 +3,8 @@
 Scene::Scene(void) : _cam(std::make_shared<Camera>(90, Vec3(0, 0, 5), Vec3(0, 0, -1)))
 {
 	std::shared_ptr<ITexture> tex1 = std::make_shared<SolidColorTexture>(1.0f, 0.5f, 0.5f);
-	std::shared_ptr<ITexture> tex3 = std::make_shared<ImageTexture>("brick_floor_tileable_Base_Color.jpg");
-	std::shared_ptr<ITexture> texN1 = std::make_shared<ImageTexture>("brick_floor_tileable_Normal.jpg");
+	std::shared_ptr<ITexture> tex3 = std::make_shared<ImageTexture>("Tiles093_1K-PNG_Color.png");
+	std::shared_ptr<ITexture> texN1 = std::make_shared<ImageTexture>("Tiles093_1K-PNG_NormalGL.png");
 	std::shared_ptr<IMaterial> mat = std::make_shared<BlinnPhongMaterial>(tex1, 0.5f);
 	std::shared_ptr<IMaterial> mat2 = std::make_shared<BlinnPhongMaterial>(tex3, 0);
 	std::shared_ptr<IMaterial> mat3 = std::make_shared<BlinnPhongMaterial>(tex3, 0, texN1);

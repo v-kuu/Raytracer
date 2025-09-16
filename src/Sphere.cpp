@@ -55,8 +55,10 @@ HitRecord	Sphere::detectHit(const Ray &ray)
 		ret.normal = (ret.point - _pos).normalize();
 		if (inside)
 			ret.normal = ret.normal * -1;
-		ret.tangent = Vec3(-local_p.z, 0, local_p.x).normalize();
-		ret.bitangent = cross(local_p, ret.tangent);
+		ret.tangent = cross(ret.normal, Vec3(0, 1, 0)).normalize();
+		if (ret.tangent.length() < 1e-6)
+			ret.tangent = cross(ret.normal, Vec3(1, 0, 0)).normalize();
+		ret.bitangent = cross(ret.normal, ret.tangent).normalize();
 		ret.mat = _mat;
 		return (ret);
 	};
