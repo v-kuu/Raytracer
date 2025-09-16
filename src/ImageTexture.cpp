@@ -14,6 +14,14 @@ ImageTexture::ImageTexture(const std::string &filename)
 		SDL_DestroySurface(buffer);
 		throw (std::runtime_error("Failed to fetch pixel format details"));
 	}
+	/*if (_detectLinear(filename))
+	{
+		SDL_Surface *linear = SDL_ConvertSurfaceAndColorspace(buffer, buffer->format, nullptr, SDL_COLORSPACE_SRGB_LINEAR, 0);
+		SDL_DestroySurface(buffer);
+		if (!linear)
+			throw (std::runtime_error("Failed to convert surface to linear colorspace"));
+		buffer = linear;
+	}*/
 	Uint32 *pixel_buffer = static_cast<Uint32*>(buffer->pixels);
 	_width = buffer->w;
 	_height = buffer->h;
@@ -22,7 +30,9 @@ ImageTexture::ImageTexture(const std::string &filename)
 		for (int x = 0; x < _width; ++x)
 		{
 		Uint32 color = pixel_buffer[y * (buffer->pitch / sizeof(Uint32)) + x];
-		_texels.push_back(_getRGB(color, format));
+		Vec3 final = _getRGB(color, format);
+		final = pow(final, 1/2.2f);
+		_texels.push_back(final);
 		}
 	}
 	SDL_DestroySurface(buffer);
@@ -64,4 +74,13 @@ Vec3	ImageTexture::_getRGB(Uint32 color, const SDL_PixelFormatDetails *format)
 	float green = g / 255.0f;
 	float blue = b / 255.0f;
 	return (Vec3(red, green, blue));
+}
+
+bool	ImageTexture::_detectLinear(const std::string &filename)
+{
+	std::string lowercase = filename;
+	std::transform(lowercase.begin(), lowercase.end(), lowercase.begin(), ::tolower);
+	if (lowercase.find("normal") != std::string::npos)
+		return (true);
+	return (false);
 }

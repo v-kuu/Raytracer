@@ -20,4 +20,5 @@ class	ImageTexture : public ITexture
 		int _width, _height;
 	
 		Vec3	_getRGB(Uint32 color, const SDL_PixelFormatDetails *format);
+		bool	_detectLinear(const std::string &filename);
 };
