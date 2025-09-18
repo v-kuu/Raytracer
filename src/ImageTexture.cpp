@@ -8,22 +8,26 @@ ImageTexture::ImageTexture(const std::string &filename)
 	SDL_Surface *buffer = IMG_Load(filepath.c_str());
 	if (buffer == nullptr)
 		throw (std::runtime_error("ImageTexture file error"));
+
+	bool linear = _detectLinear(filename);
+	SDL_Colorspace cs = SDL_COLORSPACE_SRGB_LINEAR;
+	if (linear)
+		cs = SDL_COLORSPACE_SRGB_LINEAR;
+	SDL_Surface *converted = SDL_ConvertSurfaceAndColorspace(buffer,
+			SDL_PIXELFORMAT_RGBA8888, nullptr, cs, 0);
+	SDL_DestroySurface(buffer);
+	if (!converted)
+		throw (std::runtime_error("Failed to convert surface to linear colorspace"));
+	buffer = converted;
+	Uint32 *pixel_buffer = static_cast<Uint32*>(buffer->pixels);
 	const SDL_PixelFormatDetails *format = SDL_GetPixelFormatDetails(buffer->format);
+
 	if (!format)
 	{
 		SDL_DestroySurface(buffer);
 		throw (std::runtime_error("Failed to fetch pixel format details"));
 	}
-	bool linear = _detectLinear(filename);
-	if (linear)
-	{
-		SDL_Surface *converted = SDL_ConvertSurfaceAndColorspace(buffer, buffer->format, nullptr, SDL_COLORSPACE_SRGB_LINEAR, 0);
-		SDL_DestroySurface(buffer);
-		if (!converted)
-			throw (std::runtime_error("Failed to convert surface to linear colorspace"));
-		buffer = converted;
-	}
-	Uint32 *pixel_buffer = static_cast<Uint32*>(buffer->pixels);
+
 	_width = buffer->w;
 	_height = buffer->h;
 	for (int y = 0; y < _height; ++y)
@@ -32,7 +36,7 @@ ImageTexture::ImageTexture(const std::string &filename)
 		{
 		Uint32 color = pixel_buffer[y * (buffer->pitch / sizeof(Uint32)) + x];
 		Vec3 final = _getRGB(color, format);
-		//if (!linear)
+		if (!linear)
 			final = pow(final, 1/2.2f);
 		_texels.push_back(final);
 		}
@@ -44,8 +48,8 @@ ImageTexture::ImageTexture(const std::string &filename)
 Vec3	ImageTexture::lookup(float u, float v, const Vec3 &point)
 {
 	(void)point;
-	u = std::clamp(u, 0.0f, 1.0f);
-	v = std::clamp(v, 0.0f, 1.0f);
+	u = u - std::floor(u);
+	v = v - std::floor(v);
 
 	float x = u * (_width - 1);
 	float y = v * (_height - 1);
