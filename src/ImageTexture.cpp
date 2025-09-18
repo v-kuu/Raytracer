@@ -14,14 +14,15 @@ ImageTexture::ImageTexture(const std::string &filename)
 		SDL_DestroySurface(buffer);
 		throw (std::runtime_error("Failed to fetch pixel format details"));
 	}
-	/*if (_detectLinear(filename))
+	bool linear = _detectLinear(filename);
+	if (linear)
 	{
-		SDL_Surface *linear = SDL_ConvertSurfaceAndColorspace(buffer, buffer->format, nullptr, SDL_COLORSPACE_SRGB_LINEAR, 0);
+		SDL_Surface *converted = SDL_ConvertSurfaceAndColorspace(buffer, buffer->format, nullptr, SDL_COLORSPACE_SRGB_LINEAR, 0);
 		SDL_DestroySurface(buffer);
-		if (!linear)
+		if (!converted)
 			throw (std::runtime_error("Failed to convert surface to linear colorspace"));
-		buffer = linear;
-	}*/
+		buffer = converted;
+	}
 	Uint32 *pixel_buffer = static_cast<Uint32*>(buffer->pixels);
 	_width = buffer->w;
 	_height = buffer->h;
@@ -31,7 +32,8 @@ ImageTexture::ImageTexture(const std::string &filename)
 		{
 		Uint32 color = pixel_buffer[y * (buffer->pitch / sizeof(Uint32)) + x];
 		Vec3 final = _getRGB(color, format);
-		final = pow(final, 1/2.2f);
+		//if (!linear)
+			final = pow(final, 1/2.2f);
 		_texels.push_back(final);
 		}
 	}
