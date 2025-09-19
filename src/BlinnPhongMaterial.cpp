@@ -88,7 +88,6 @@ Vec3	BlinnPhongMaterial::_reflectionColor(
 
 Uint32	BlinnPhongMaterial::_mixColor(const Vec3 &base, const Vec3 &refl) const
 {
-
 	Uint8 red = static_cast<Uint8>(255 *
 			(base.x * (1 - _reflectivity) + refl.x * _reflectivity));
 	Uint8 green = static_cast<Uint8>(255 *

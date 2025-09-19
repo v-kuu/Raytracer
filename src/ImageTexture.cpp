@@ -9,25 +9,23 @@ ImageTexture::ImageTexture(const std::string &filename)
 	if (buffer == nullptr)
 		throw (std::runtime_error("ImageTexture file error"));
 
-	bool linear = _detectLinear(filename);
 	SDL_Colorspace cs = SDL_COLORSPACE_SRGB_LINEAR;
-	if (linear)
-		cs = SDL_COLORSPACE_SRGB_LINEAR;
 	SDL_Surface *converted = SDL_ConvertSurfaceAndColorspace(buffer,
 			SDL_PIXELFORMAT_RGBA8888, nullptr, cs, 0);
 	SDL_DestroySurface(buffer);
 	if (!converted)
 		throw (std::runtime_error("Failed to convert surface to linear colorspace"));
 	buffer = converted;
-	Uint32 *pixel_buffer = static_cast<Uint32*>(buffer->pixels);
-	const SDL_PixelFormatDetails *format = SDL_GetPixelFormatDetails(buffer->format);
 
+	const SDL_PixelFormatDetails *format = SDL_GetPixelFormatDetails(buffer->format);
 	if (!format)
 	{
 		SDL_DestroySurface(buffer);
 		throw (std::runtime_error("Failed to fetch pixel format details"));
 	}
 
+	bool linear = _detectLinear(filename);
+	Uint32 *pixel_buffer = static_cast<Uint32*>(buffer->pixels);
 	_width = buffer->w;
 	_height = buffer->h;
 	for (int y = 0; y < _height; ++y)

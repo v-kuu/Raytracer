@@ -17,7 +17,7 @@ Scene::Scene(void) : _cam(std::make_shared<Camera>(90, Vec3(0, 0, 5), Vec3(0, 0,
 				Vec3(-20, -4, -20),
 				Vec3(20, -4, -20),
 				mat3));
-	_lights.push_back(std::make_shared<PointLight>(1.0f, 1.0f, 1.0f, 1.0f, Vec3(-5, 10, -5)));
+	_lights.push_back(std::make_shared<PointLight>(1.0f, 1.0f, 1.0f, 1.0f, Vec3(-5, 100, -5)));
 	_bvh = std::make_unique<BVHNode>(_objects);
 }
 
