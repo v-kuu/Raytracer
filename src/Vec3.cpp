@@ -96,3 +96,11 @@ Vec3	reflect(const Vec3 &vec, const Vec3 &normal)
 {
 	return (vec - normal * (2 * dot(vec, normal)));
 }
+
+Vec3	pow(const Vec3 &vec, float exponent)
+{
+	return (Vec3(
+				std::pow(vec.x, exponent),
+				std::pow(vec.y, exponent),
+				std::pow(vec.z, exponent)));
+}

@@ -31,38 +31,43 @@ HitRecord	Sphere::detectHit(const Ray &ray)
 {
 	constexpr float miss = std::numeric_limits<float>::max();
 
+	HitRecord ret(miss);
 	Vec3	oc = _pos - ray.orig;
 	float	a = dot(ray.dir, ray.dir);
 	float	b = dot(ray.dir, oc);
 	float	c = dot(oc, oc) - _radius * _radius;
 	float	discriminant = b * b - a * c;
 	if (discriminant < 0)
-		return (HitRecord(miss));
+		return (ret);
 	float disc_square = sqrtf(discriminant);
 	float t1 = (b - disc_square) / a;
 	float t2 = (b + disc_square) / a;
+
+	auto calculate_hit = [&](float t, bool inside)
+	{
+		ret.t = t;
+		ret.point = rayAt(ray, t);
+		Vec3 local_p = (ret.point - _pos).normalize();
+		float theta = std::acos(-local_p.y);
+		float phi = std::atan2(-local_p.z, local_p.x) + M_PI;
+		ret.u = phi / (2 * M_PI);
+		ret.v = theta / M_PI;
+		ret.normal = (ret.point - _pos).normalize();
+		if (inside)
+			ret.normal = ret.normal * -1;
+		ret.tangent = cross(ret.normal, Vec3(0, 1, 0)).normalize();
+		if (ret.tangent.length() < 1e-6)
+			ret.tangent = cross(ret.normal, Vec3(1, 0, 0)).normalize();
+		ret.bitangent = cross(ret.normal, ret.tangent).normalize();
+		ret.mat = _mat;
+		return (ret);
+	};
 	if (t1 >= 0)
-	{
-		Vec3 hit_point = rayAt(ray, t1);
-		Vec3 local_p = (hit_point - _pos).normalize();
-		float theta = std::acos(-local_p.y);
-		float phi = std::atan2(-local_p.z, local_p.x) + M_PI;
-		float u = phi / (2 * M_PI);
-		float v = theta / M_PI;
-		return (HitRecord(t1, (hit_point - _pos).normalize(), hit_point, _mat, u, v));
-	}
+		return (calculate_hit(t1, false));
 	else if (t2 >= 0)
-	{
-		Vec3 hit_point = rayAt(ray, t2);
-		Vec3 local_p = (hit_point - _pos).normalize();
-		float theta = std::acos(-local_p.y);
-		float phi = std::atan2(-local_p.z, local_p.x) + M_PI;
-		float u = phi / (2 * M_PI);
-		float v = theta / M_PI;
-		return (HitRecord(t2, ((hit_point - _pos).normalize()) * -1, hit_point, _mat, u, v));
-	}
+		return (calculate_hit(t2, true));
 	else
-		return (HitRecord(miss));
+		return (ret);
 }
 
 float	Sphere::getRadius(void) const
