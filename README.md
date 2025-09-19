@@ -22,13 +22,12 @@ You will then find the binary in the build directory:
 - Bounding volume hierarchy (BVH) to group objects in a scene to drastically cut ray intersection tests
 - Shading uses Blinn-Phong reflection model
 - Quaternions for camera rotations
+- Textures and normal maps
 
 ## Todo
 
 - Handle multiple lights
-- Early exits from rendering for inputs
 - Full SAH for BVH
-- Textures
 - Scene files and parser
 - Soft shadows
 - GPU
