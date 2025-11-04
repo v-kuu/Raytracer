@@ -6,8 +6,7 @@ Work in progress
 ## Installation (Linux)
 Clone the repo wherever and then in the repository root:
 ```bash
-mkdir -p build
-(cd build && cmake ..)
+cmake -B build
 cmake --build build -j4
 ```
 You will then find the binary in the build directory:
@@ -26,6 +25,7 @@ You will then find the binary in the build directory:
 
 ## Todo
 
+- PBR approach
 - Handle multiple lights
 - Full SAH for BVH
 - Scene files and parser
