@@ -101,7 +101,7 @@ Vec3	BlinnPhongMaterial::_sampleNormalMap(const HitRecord &hit) const
 {
 	Vec3 tangentNormal = (*_normalMap)->lookup(hit.u, hit.v, hit.point);
 	tangentNormal = tangentNormal * 2.0 - Vec3(1, 1, 1);
-	Vec3 worldNormal = (hit.tangent * tangentNormal.x +
+	Vec3 worldNormal = (hit.tangent * tangentNormal.x -
 		hit.bitangent * tangentNormal.y +
 		hit.normal * tangentNormal.z).normalize();
 	return (worldNormal);
