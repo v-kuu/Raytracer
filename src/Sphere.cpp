@@ -48,16 +48,18 @@ HitRecord	Sphere::detectHit(const Ray &ray)
 		ret.t = t;
 		ret.point = rayAt(ray, t);
 		ret.normal = (ret.point - _pos).normalize();
+		if (inside)
+			ret.normal = ret.normal * -1;
+
 		float theta = std::acos(-ret.normal.y);
 		float phi = std::atan2(-ret.normal.z, ret.normal.x) + M_PI;
 		ret.u = phi / (2 * M_PI);
 		ret.v = theta / M_PI;
-		if (inside)
-			ret.normal = ret.normal * -1;
-		ret.tangent = cross(Vec3(0, 1, 0), ret.normal).normalize();
-		if (ret.tangent.length() < 1e-6)
-			ret.tangent = cross(Vec3(1, 0, 0), ret.normal).normalize();
-		ret.bitangent = cross(ret.tangent, ret.normal).normalize();
+
+		ret.tangent = Vec3(-std::sin(phi), 0, -std::cos(phi)).normalize();
+		ret.bitangent = cross(ret.normal, ret.tangent).normalize();
+		if (dot(cross(ret.tangent, ret.bitangent), ret.normal) < 0.0f)
+			ret.tangent = ret.tangent * -1.0f;
 		ret.mat = _mat;
 		return (ret);
 	};

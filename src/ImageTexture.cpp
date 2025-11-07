@@ -24,7 +24,7 @@ ImageTexture::ImageTexture(const std::string &filename)
 		throw (std::runtime_error("Failed to fetch pixel format details"));
 	}
 
-	bool linear = _detectLinear(filename);
+	//bool linear = _detectLinear(filename);
 	Uint32 *pixel_buffer = static_cast<Uint32*>(buffer->pixels);
 	_width = buffer->w;
 	_height = buffer->h;
@@ -34,7 +34,7 @@ ImageTexture::ImageTexture(const std::string &filename)
 		{
 		Uint32 color = pixel_buffer[y * (buffer->pitch / sizeof(Uint32)) + x];
 		Vec3 final = _getRGB(color, format);
-		if (!linear)
+		//if (!linear)
 			final = pow(final, 1/2.2f);
 		_texels.push_back(final);
 		}
