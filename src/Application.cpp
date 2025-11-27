@@ -9,7 +9,7 @@ Application::Application(void) : _renderer(nullptr), _canvas(nullptr)
 	{
 		Window::getInstance();
 	}
-	catch (std::exception)
+	catch (std::exception &e)
 	{
 		throw ;
 	}
@@ -19,7 +19,7 @@ Application::Application(void) : _renderer(nullptr), _canvas(nullptr)
 		_renderer = std::make_shared<Renderer>(Window::getInstance());
 		_canvas = std::make_unique<Canvas>(_renderer);
 	}
-	catch (std::exception)
+	catch (std::exception &e)
 	{
 		throw ;
 	}
@@ -31,7 +31,7 @@ Application::~Application(void)
 	{
 		Window::getInstance()->~Window();
 	}
-	catch (std::exception)
+	catch (std::exception &e)
 	{
 	}
 	SDL_Quit();

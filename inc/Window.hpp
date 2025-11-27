@@ -2,6 +2,7 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include <mutex>
+#include <stdexcept>
 
 class	Window
 {
