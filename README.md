@@ -18,7 +18,7 @@ You will then find the binary in the build directory:
 ```
 ## Keybinds
 
-ESC to exit, WASD to move camera left/right/up/down, arrow keys to turn camera, RF to move forward, backward
+ESC to exit, WASD to move camera left/right/up/down, arrow keys to turn camera, RF to move forward/backward
 
 ## Features
 
