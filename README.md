@@ -16,6 +16,8 @@ You will then find the binary in the build directory:
 ```bash
 ./build/raytracer
 ```
+## Keybinds
+
 ESC to exit, WASD to move camera left/right/up/down, arrow keys to turn camera, RF to move forward, backward
 
 ## Features
