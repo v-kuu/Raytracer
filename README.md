@@ -3,6 +3,9 @@ Utilizes SDL3 to handle window management, keyboard input etc.
 
 Work in progress
 
+Example: Blinn-Phong shading without and with normal maps
+![](/example.png)
+
 ## Installation (Linux)
 Clone the repo wherever and then in the repository root:
 ```bash
